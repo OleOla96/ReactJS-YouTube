@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  height: 100vh;
+  padding: 0 12px;
+  min-width: 384px;
+  margin: calc(var(--heightHeader) + 10px) 0px 8px;
+
+  .left,
+  .right {
+    display: flex;
+    height: 100vh;
+  }
+  .left {
+    flex-direction: column;
+    flex: 0 0 64px;
+    margin-left: -8px;
+
+    &.action {
+      flex: 0 0 220px;
+      margin-right: 24px;
+    }
+  }
+  .right {
+    width: 100%;
+    justify-content: center;
+  }
+}

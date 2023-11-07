@@ -1,0 +1,231 @@
+.watch {
+  display: flex;
+  width: 100%;
+}
+
+.resize {
+  position: relative;
+  padding-bottom: calc(56.25% - 30px);
+  padding-top: 30px;
+  height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.resize iframe,
+.resize object,
+.resize embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.screenVideo {
+  width: 854px;
+  max-width: 100%;
+  height: 480px;
+  max-height: 100%;
+}
+
+.top-row {
+  .card-title {
+    margin-bottom: 2px;
+    color: rgb(15, 15, 15);
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 2.8rem;
+    font-family: 'YouTube Sans', 'Arial', sans-serif;
+    max-height: 5.6rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
+    white-space: normal;
+  }
+  .subWarp {
+    display: flex;
+    justify-content: space-between;
+    .left {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      .avatarDefault {
+        display: block;
+        width: 4rem;
+        height: 4rem;
+        color: var(--white);
+        font-size: 2rem;
+        line-height: 4rem;
+        font-weight: 400;
+        margin-right: 8px;
+        text-align: center;
+        background-color: var(--color-avatar);
+        border-radius: 50%;
+
+        &a:hover {
+          color: inherit;
+        }
+      }
+      .inforChanel {
+        display: flex;
+        flex-direction: column;
+        margin-right: 24px;
+        .text-channel {
+          font-size: 1.6rem;
+          line-height: 2.2rem;
+          font-weight: 500;
+          color: rgb(15, 15, 15);
+        }
+      }
+      .bg-black {
+        color: var(--white);
+        background-color: var(--black);
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+    }
+    .right {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      justify-content: flex-end;
+
+      .btn-multi {
+        display: inline-block;
+        height: 3.6rem;
+        line-height: 3.6rem;
+        padding: 0 16px;
+        text-align: center;
+        border: none;
+        border-radius: 18px;
+        background-color: rgba(0, 0, 0, 0.05);
+
+        .btn-child {
+          height: 36px;
+          background-color: transparent;
+
+          &.start {
+            margin-left: -15px;
+            border-radius: 18px 0 0 18px;
+          }
+          &.end {
+            margin-right: -15px;
+            border-radius: 0 18px 18px 0;
+          }
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            &:disabled {
+              background-color: transparent;
+            }
+          }
+        }
+        .likeIcon {
+          font-size: 2rem;
+          &.start {
+            margin: 0 6px 0 -6px;
+          }
+        }
+        button:disabled .likeIcon {
+          opacity: 0.3;
+        }
+      }
+    }
+  }
+}
+
+.bottom-row {
+  padding: 12px;
+  border-radius: 12px;
+  background-color: rgba($color: #000000, $alpha: 0.05);
+
+  .text-des,
+  .text-viewCount {
+    font-size: 1.4rem;
+    line-height: 2rem;
+    color: rgb(15, 15, 15);
+  }
+  .text-des {
+    font-weight: 400;
+  }
+  .text-viewCount {
+    font-weight: 500;
+  }
+}
+
+.col-12.wrapCardSidebar {
+  margin-top: 24px;
+}
+
+.cardSidebar {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  width: 402px;
+  max-width: 100%;
+  height: 98px;
+  border: none;
+  overflow: hidden;
+  border-radius: 0;
+
+  .card-img-top {
+    width: 168px;
+    height: inherit;
+    margin-right: 8px;
+    border-radius: 8px;
+  }
+  .cardSidebar-title {
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 2rem;
+    max-height: 4rem;
+    margin-bottom: 4px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
+    white-space: normal;
+
+    &:hover {
+      opacity: unset;
+    }
+  }
+  .cardSidebar-channel {
+    color: #969696;
+    font-size: 1.2rem;
+    font-weight: lighter;
+    line-height: 1.8rem;
+    max-height: 3.6rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
+    white-space: normal;
+
+    &:hover {
+      opacity: unset;
+    }
+  }
+  .text-infor {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    color: var(--text-color-cardYT);
+  }
+}
+
+.hide {
+  display: none;
+}
+
+@media (min-width: 1014px) {
+  .col-12 {
+    display: none;
+  }
+}

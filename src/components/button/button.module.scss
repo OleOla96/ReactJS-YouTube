@@ -1,0 +1,99 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  font-family: var(--font-family);
+  background-color: rgba(0, 0, 0, 1);
+  user-select: none;
+  cursor: pointer;
+
+  + .wrapper {
+    margin-left: 8px;
+  }
+
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
+
+// .icon + .title,
+// .title + .icon {
+//   margin-left: 8px;
+// }
+
+.title {
+  white-space: nowrap;
+}
+.icon {
+  display: inline-block;
+  width: var(--size-item-default);
+  height: var(--size-item-default);
+  font-size: calc(var(--size-item-default) - 4px);
+  text-align: center;
+  line-height: var(--size-item-default);
+  margin-right: 6px;
+  margin-left: -6px;
+}
+
+// Button types
+.primary {
+  height: 36px;
+  color: var(--black);
+  line-height: 36px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 18px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.rounded {
+  height: 36px;
+  border-radius: 18px;
+  border: 1px solid transparent;
+}
+
+.submit {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.circle {
+  min-width: unset;
+  padding: 0;
+}
+
+.outline {
+  color: var(--color-signin);
+  background-color: var(--white);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: #def1ff;
+  }
+}
+
+.text {
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Button sizes
+.small {
+  min-width: 88px;
+  padding: 4px 16px;
+}
+
+.large {
+  padding: 14px 16px;
+  min-width: 140px;
+}
