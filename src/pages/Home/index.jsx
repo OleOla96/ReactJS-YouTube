@@ -2,18 +2,17 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect, memo } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import classNames from 'classnames/bind';
-import styles from './home.module.scss';
-import axios from '../../common/axios';
-import useContexts from '../../hooks/useContexts';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-
-const cb = classNames.bind(styles);
+import axios from '~/common/axios';
+import { BASE_URL } from '~/common/axios';
+import useContexts from '~/hooks/useContexts';
+import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 
 const Home = () => {
   const { auth } = useContexts();
   const axiosPrivate = useAxiosPrivate();
   const [contents, setContents] = useState([]);
+  const extension = ['.mp4', '.mkv', '.mov'];
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -42,25 +41,38 @@ const Home = () => {
         <div className="col-sm-6 col-lg-4" key={content?.id}>
           <div className={'cardYoutube card mt-4'}>
             <Link to={`watch/${content?.linkVideo}`}>
-              <img
-                loading="lazy"
-                className="card-img-top"
-                src={`https://i.ytimg.com/vi/${content?.linkVideo}/maxresdefault.jpg`}
-                alt={content?.title}
-              />
+              {content?.linkVideo && extension.some((ex) => content?.linkVideo.endsWith(ex)) ? (
+                <video
+                  loading="lazy"
+                  className="card-img-top"
+                  src={`${BASE_URL}video/${content?.linkVideo}`}
+                  alt={content?.title}
+                />
+              ) : (
+                <img
+                  loading="lazy"
+                  className="card-img-top"
+                  src={`https://i.ytimg.com/vi/${content?.linkVideo}/maxresdefault.jpg`}
+                  alt={content?.title}
+                />
+              )}
             </Link>
-            <div className={cb('card-des', 'mt-4')}>
+            <div className="card-des mt-4">
               <Link to={`channel/${content?.user?.channelName}`} className="mr-3">
-                <div className={cb('avatar')}>{content?.user?.channelName?.slice(0, 1).toUpperCase()}</div>
+                {content?.user?.avatar ? (
+                  <img src={`${BASE_URL}image/avatar/${content?.user?.avatar}`} alt="" className="avatar" />
+                ) : (
+                  <div className="avatar">{content?.user?.channelName?.slice(0, 1).toUpperCase()}</div>
+                )}
               </Link>
-              <div className={cb('inforBase')}>
+              <div className="inforBase">
                 <Link to={`watch/${content?.linkVideo}`} className="card-title">
                   {content?.title}
                 </Link>
-                <Link to={`channel/${content?.user?.channelName}`} className={cb('text-infor')}>
+                <Link to={`channel/${content?.user?.channelName}`} className="text-infor">
                   {content?.user?.channelName}
                 </Link>
-                <span className={cb('text-viewCount')}>
+                <span className="text-viewCount">
                   {content?.view} view{content?.view > 1 && 's'}
                 </span>
               </div>

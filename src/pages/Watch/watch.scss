@@ -52,23 +52,6 @@
       display: flex;
       flex: 1;
       align-items: center;
-      .avatarDefault {
-        display: block;
-        width: 4rem;
-        height: 4rem;
-        color: var(--white);
-        font-size: 2rem;
-        line-height: 4rem;
-        font-weight: 400;
-        margin-right: 8px;
-        text-align: center;
-        background-color: var(--color-avatar);
-        border-radius: 50%;
-
-        &a:hover {
-          color: inherit;
-        }
-      }
       .inforChanel {
         display: flex;
         flex-direction: column;

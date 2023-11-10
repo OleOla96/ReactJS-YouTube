@@ -3,12 +3,12 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import classname from 'classnames/bind';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import useContexts from '../../hooks/useContexts';
-import useInput from '../../hooks/useInput';
-import useToggle from '../../hooks/useToggle';
-import axios from '../../common/axios';
+import useContexts from '~/hooks/useContexts';
+import useInput from '~/hooks/useInput';
+import useToggle from '~/hooks/useToggle';
+import axios from '~/common/axios';
 import styles from './loginRegister.module.scss';
-import { LogoLoginGoogle } from '../../components/icons';
+import { LogoLoginGoogle } from '~/components/icons';
 
 const cb = classname.bind(styles);
 
@@ -16,7 +16,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || '/';
-  const { setAuth } = useContexts();
+  const { setAuth, setAvatar } = useContexts();
   const [username, resetUser, userAttribs] = useInput('user', '');
   const [password, setPassword] = useState('');
   const [check, toggleCheck] = useToggle('persist', false);
@@ -47,12 +47,15 @@ const Login = () => {
       );
       if (res) {
         const accessToken = res.data?.accessToken;
-        const email = res.data?.email;
+        if (res.data.avatar) {
+          setAvatar(res.data.avatar);
+          localStorage.setItem('avatar', res.data.avatar);
+        }
         setLoading(false);
         toast.success(res.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });
-        setAuth({ username, email, accessToken });
+        setAuth({ username, accessToken });
         resetUser();
         setPassword('');
         navigate(from, { replace: true });

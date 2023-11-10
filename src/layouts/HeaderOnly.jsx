@@ -7,10 +7,10 @@ import useContexts from '../hooks/useContexts';
 const cb = classname.bind(style);
 
 function HeaderOnly({ children }) {
-  const { auth } = useContexts();
+  const { auth, avatar } = useContexts();
   return (
     <div className={cb('container')}>
-      <Header auth={auth} />
+      <Header auth={auth} avatar={avatar} />
       <div className={cb('right')}>{children}</div>
     </div>
   );

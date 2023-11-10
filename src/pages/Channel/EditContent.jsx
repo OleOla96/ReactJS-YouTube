@@ -17,11 +17,11 @@ const EditContent = ({ contentEdit, setEdit, setSubmitted, toast }) => {
   const [dataReq, setDataReq] = useState(initialData);
   const [stateContent, setStateContent] = useState(initialData.stateContent);
   const [loading, setLoading] = useState(false);
-  const [submit, setSubmit] = useState(false);
+  const [allowSubmit, setAllowSubmit] = useState(false);
 
   useEffect(() => {
-    if (dataReq.title && dataReq.linkVideo) setSubmit(true);
-    else setSubmit(false);
+    if (dataReq.title && dataReq.linkVideo) setAllowSubmit(true);
+    else setAllowSubmit(false);
   }, [dataReq.title, dataReq.linkVideo]);
 
   const handleInputChange = (event) => {
@@ -114,7 +114,7 @@ const EditContent = ({ contentEdit, setEdit, setSubmitted, toast }) => {
           </label>
         </div>
         <div className="form-group">
-          <button className={cb('btn-round', 'btn-primary btn-state')} disabled={!submit || loading}>
+          <button className={cb('btn-round', 'btn-primary btn-state')} disabled={!allowSubmit || loading}>
             {loading && <span className="spinner-border spinner-border-sm"></span>}
             Update
           </button>

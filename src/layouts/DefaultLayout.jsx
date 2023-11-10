@@ -9,22 +9,24 @@ import useContexts from '../hooks/useContexts';
 const cb = classname.bind(style);
 
 function DefaultLayout({ children }) {
-  const { auth } = useContexts();
+  const { auth, avatar } = useContexts();
   const [sidebarFull, setSidebarFull] = useState(window.innerWidth >= 1016);
   const [change, setChange] = useState(false);
+
   useEffect(() => {
     const handleResize = () => {
       setChange(window.innerWidth < 1016);
-      setSidebarFull(window.innerWidth >= 1016);
+      if (sidebarFull) setSidebarFull(window.innerWidth >= 1016);
     };
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [sidebarFull]);
+
   return (
     <>
-      <HeaderMain setSidebarFull={setSidebarFull} change={change} />
+      <HeaderMain setSidebarFull={setSidebarFull} change={change} auth={auth} avatar={avatar} />
       <div className={cb('container')}>
         <div className={cb('left', { action: sidebarFull })}>
           <Sidebar sidebarFull={sidebarFull} auth={auth} />

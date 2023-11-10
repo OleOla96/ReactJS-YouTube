@@ -1,29 +1,31 @@
 import { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import Button from '~/components/button/Button';
+import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 import className from 'classnames/bind';
 import styles from './createEdit.module.scss';
+import Button from '~/components/button/Button';
 
 const cb = className.bind(styles);
 
-const CreateContent = () => {
+const UploadContent = () => {
   const axiosPrivate = useAxiosPrivate();
   const initialData = {
     title: '',
     description: '',
-    linkVideo: '',
   };
   const [dataReq, setDataReq] = useState(initialData);
   const [stateContent, setStateContent] = useState(false);
+  const [video, setVideo] = useState();
   const [loading, setLoading] = useState(false);
   const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
-    if (dataReq.title && dataReq.linkVideo) setSubmit(true);
-    else setSubmit(false);
-  }, [dataReq.title, dataReq.linkVideo]);
+    if (dataReq.title && video) {
+      console.log('here');
+      setSubmit(true);
+    } else setSubmit(false);
+  }, [dataReq.title, video]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,15 +35,14 @@ const CreateContent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const data = {
-      title: dataReq.title,
-      description: dataReq.description,
-      linkVideo: dataReq.linkVideo,
-      stateContent,
-    };
+    const formData = new FormData();
+    formData.append('video', video);
+    formData.append('title', dataReq.title);
+    formData.append('description', dataReq.description);
+    formData.append('stateContent', stateContent);
 
     try {
-      const res = await axiosPrivate.put('crud/create', data);
+      const res = await axiosPrivate.put('crud/upload', formData);
       setLoading(false);
       setDataReq(initialData);
       toast.success(res.data.message, {
@@ -60,9 +61,9 @@ const CreateContent = () => {
     <>
       <ToastContainer autoClose={2000} />
       <form onSubmit={handleSubmit} className={cb('card-validate')}>
-        <h2 className={cb('card-title', 'text-center')}>Create Content</h2>
+        <h2 className={cb('card-title', 'text-center')}>Upload Content</h2>
         <div className="form-row">
-          <div className="col-md-6 mb-3">
+          <div className="col-md-12 mb-3">
             <label htmlFor="title">Title</label>
             <input
               autoFocus
@@ -75,15 +76,13 @@ const CreateContent = () => {
               required
             />
           </div>
-          <div className="col-md-6 mb-3">
-            <label htmlFor="linkVideo">Link Video</label>
+          <div className="col-md-12 mb-3">
             <input
-              type="text"
-              name="linkVideo"
-              id="linkVideo"
-              className={cb('form-input')}
-              value={dataReq.linkVideo}
-              onChange={handleInputChange}
+              type="file"
+              name="video"
+              id="video"
+              className="form-control-file"
+              onChange={(e) => setVideo(e.target.files[0])}
               required
             />
           </div>
@@ -116,7 +115,7 @@ const CreateContent = () => {
         <div className="col-md-6 mx-auto">
           <Button rounded submit className={cb('btn-round')} disabled={!submit || loading}>
             {loading && <span className="spinner-border spinner-border-sm"></span>}
-            Create
+            Upload
           </Button>
         </div>
       </form>
@@ -124,4 +123,4 @@ const CreateContent = () => {
   );
 };
 
-export default CreateContent;
+export default UploadContent;

@@ -20,6 +20,7 @@ export default function Button({
   children,
   className,
   leftIcon,
+  centerIcon,
   rightIcon,
   onClick,
   ...passProps
@@ -62,6 +63,7 @@ export default function Button({
   return (
     <Comp className={classes} {...props}>
       {leftIcon && <span className={cb('icon')}>{leftIcon}</span>}
+      {centerIcon && <span className={cb('icon', 'center')}>{centerIcon}</span>}
       <span className={cb('title')}>{children}</span>
       {rightIcon && <span className={cb('icon')}>{rightIcon}</span>}
     </Comp>
@@ -82,6 +84,7 @@ Button.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   leftIcon: PropTypes.node,
+  centerIcon: PropTypes.node,
   rightIcon: PropTypes.node,
   onClick: PropTypes.func,
 };

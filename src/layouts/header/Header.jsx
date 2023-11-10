@@ -3,9 +3,10 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import classname from 'classnames/bind';
 import styles from './header.module.scss';
-import useLogout from '../../hooks/useLogout';
+import useLogout from '~/hooks/useLogout';
 import Search1 from '../search/Search1';
 import Search2 from '../search/Search2';
+import { BASE_URL } from '~/common/axios';
 import SideEffect from './SideEffect';
 import {
   LogoIcon,
@@ -16,14 +17,15 @@ import {
   SingoutIcon,
   StudioIcon,
   SwitchIcon,
-} from '../../components/icons';
+} from '~/components/icons';
 import Button from '~/components/button/Button';
 
 const cb = classname.bind(styles);
 
-function Header({ auth }) {
+function Header({ auth, avatar }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const avatarURL = avatar ? `${BASE_URL}image/avatar/${avatar}` : avatar;
   const _logOut = useLogout();
   const logOut = async () => {
     await _logOut();
@@ -58,7 +60,10 @@ function Header({ auth }) {
       {Object.keys(auth).length ? (
         <div className={cb('headerRight')}>
           <Tippy content="Create">
-            <Link to={'/content/create'} className={cb('btn-circle', 'mr-8px')}>
+            {/* <Link to={'/content/create'} className={cb('btn-circle', 'mr-8px')}>
+              <CameraIcon className={cb('size-icon')} />
+            </Link> */}
+            <Link to={'/content/upload'} className={cb('btn-circle', 'mr-8px')}>
               <CameraIcon className={cb('size-icon')} />
             </Link>
           </Tippy>
@@ -70,12 +75,20 @@ function Header({ auth }) {
           <input type="checkbox" hidden id="checkDropdown" className={cb('checkDropdown-menu')} />
           <label htmlFor="checkDropdown" className={cb('bg-cl-trans')}></label>
           <label htmlFor="checkDropdown" className={cb('sizeM-bg')}>
-            <span className={cb('bg-color', 'bgM-icon')}>{auth.username.slice(0, 1).toUpperCase()}</span>
+            {avatarURL ? (
+              <img src={avatarURL} alt="avatar" className="avatarHeader" />
+            ) : (
+              <div className="avatarHeader">{auth.username.slice(0, 1).toUpperCase()}</div>
+            )}
           </label>
           <div className={cb('dropdown-menu')}>
             <div className={cb('baseProfile')}>
               <div className={cb('baseProfile-mr')}>
-                <span className={cb('bg-color', 'bgM-icon')}>{auth.username.slice(0, 1).toUpperCase()}</span>
+                {avatarURL ? (
+                  <img src={avatarURL} alt="avatar" className="avatarHeader" />
+                ) : (
+                  <div className="avatarHeader">{auth.username.slice(0, 1).toUpperCase()}</div>
+                )}
               </div>
               <div className={cb('inforProfile')}>
                 <span className={cb('inforProfile-user')}>{auth.username}</span>

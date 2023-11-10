@@ -5,6 +5,7 @@
   flex: 1;
   max-width: 540px;
   min-width: 280px;
+  height: fit-content;
   margin-top: var(--heightHeader);
   padding: 20px;
   background-color: #f7f7f7;
@@ -21,7 +22,6 @@
   }
 
   .btn-round {
-    border-radius: 30px;
     min-height: 36px;
     min-width: 140px;
     width: 100%;

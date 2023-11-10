@@ -11,8 +11,8 @@ import {
   HomeActiveIcon,
   ShortsIcon,
   ShortsActiveIcon,
-  LibraryIcon,
-  LibraryActiveIcon,
+  YourChannelIcon,
+  YourChannelActiveIcon,
   SubscriptionsIcon,
   SubscriptionsActiveIcon,
   HistoryIcon,
@@ -73,7 +73,12 @@ function SideEffect({ setSidebarFull, change = true, auth, hanldeLogin }) {
             activeIcon={<SubscriptionsActiveIcon />}
           />
           <div className={cb('dropdown-divider')}></div>
-          <SidebarItem title="Library" link={'/library'} icon={<LibraryIcon />} activeIcon={<LibraryActiveIcon />} />
+          <SidebarItem
+            title="Library"
+            link={'/library'}
+            icon={<YourChannelIcon />}
+            activeIcon={<YourChannelActiveIcon />}
+          />
           <SidebarItem title="History" link={'/history'} icon={<HistoryIcon />} activeIcon={<HistoryActiveIcon />} />
           <SidebarItem
             title="Your videos"

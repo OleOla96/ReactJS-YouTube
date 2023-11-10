@@ -9,8 +9,8 @@ import {
   HomeActiveIcon,
   ShortsIcon,
   ShortsActiveIcon,
-  LibraryIcon,
-  LibraryActiveIcon,
+  YourChannelIcon,
+  YourChannelActiveIcon,
   SubscriptionsIcon,
   SubscriptionsActiveIcon,
   HistoryIcon,
@@ -61,11 +61,11 @@ const Sidebar = ({ sidebarFull = true, auth }) => {
       />
       {sidebarFull && <div className={cb('dropdown-divider')}></div>}
       <SidebarItem
-        title="Library"
-        link={'/library'}
-        icon={<LibraryIcon />}
+        title="Your Channel"
+        link={'/channel'}
+        icon={<YourChannelIcon />}
         mini={!sidebarFull}
-        activeIcon={<LibraryActiveIcon />}
+        activeIcon={<YourChannelActiveIcon />}
       />
       {sidebarFull && (
         <>

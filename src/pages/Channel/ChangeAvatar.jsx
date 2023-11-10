@@ -6,29 +6,27 @@ import Button from '~/components/button/Button';
 
 const cb = classname.bind(styles);
 
-const ChangeAvatar = ({ onChangeAvatar, setSubmitted, toast, auth }) => {
+const ChangeAvatar = ({ onChangeAvatar, setSubmitted, toast, avatarOld }) => {
   const axiosPrivate = useAxiosPrivate();
   const [file, setFile] = useState();
-  const [avatar, setAvatar] = useState({});
+  const [avatarPr, setAvatar] = useState();
   const [loading, setLoading] = useState(false);
-  const [_submit, setSubmit] = useState(false);
-  // console.log(avatar);
+  const [allowSubmit, setAllowSubmit] = useState(false);
 
   useEffect(() => {
     if (file) {
-      setSubmit(true);
-    } else setSubmit(false);
+      setAllowSubmit(true);
+    } else setAllowSubmit(false);
 
     return () => {
-      avatar && URL.revokeObjectURL(avatar.preview);
+      avatarPr && URL.revokeObjectURL(avatarPr.preview);
     };
-  }, [avatar, file]);
+  }, [avatarPr, file]);
 
   const handlePreviewAvatar = (e) => {
-    setFile(e.target.files[0]);
-    const file = e.target.files[0];
-    console.log(file);
-    setAvatar(URL.createObjectURL(file));
+    const _file = e.target.files[0];
+    setFile(_file);
+    setAvatar(URL.createObjectURL(_file));
   };
 
   const handleUpdate = async (e) => {
@@ -62,13 +60,17 @@ const ChangeAvatar = ({ onChangeAvatar, setSubmitted, toast, auth }) => {
         <button className="btn-close" onClick={() => onChangeAvatar(false)}>
           &times;
         </button>
-        {avatar ? (
-          <div className={cb('wrap')}>
-            <img src={avatar} alt="avatar" className={cb('avatar')} />
+        {avatarPr ? (
+          <div className={cb('wrap', 'mb-4')}>
+            <img src={avatarPr} alt="" className={cb('avatar')} />
           </div>
         ) : (
-          <div className={cb('wrap')}>
-            <div className={cb('avatar')}>{auth?.username.slice(0, 1).toUpperCase()}</div>
+          <div className={cb('wrap', 'mb-4')}>
+            {avatarOld?.username ? (
+              <div className={cb('avatar')}>{avatarOld?.username.slice(0, 1).toUpperCase()}</div>
+            ) : (
+              <img src={avatarOld} alt="" className={cb('avatar')} />
+            )}
           </div>
         )}
         <div className="form-group my-4 mx-auto">
@@ -82,8 +84,8 @@ const ChangeAvatar = ({ onChangeAvatar, setSubmitted, toast, auth }) => {
             required
           />
         </div>
-        <div className="form-group mx-auto">
-          <Button rounded submit disabled={!_submit || loading} className={'mx-auto'}>
+        <div className="form-group text-center">
+          <Button rounded submit disabled={!allowSubmit || loading} className={'mx-auto'}>
             {loading && <span className="spinner-border spinner-border-sm"></span>}
             Update
           </Button>

@@ -12,6 +12,7 @@ import Register from './pages/LoginRegister/Register';
 import Home from './pages/Home';
 import WatchVideoPublic from './pages/Watch/Public';
 import CreateContent from './pages/Channel/CreateContent';
+import UploadContent from './pages/Channel/UploadContent';
 import MyChannel from './pages/Channel/MyChannel';
 import WatchVideoPrivate from './pages/Watch/Private';
 import ManageVideos from './pages/Channel/ManageVideos';
@@ -33,6 +34,9 @@ function App() {
           <Route path="watch/:linkVideo" element={<HeaderOnly><WatchVideoPublic /></HeaderOnly>} />
           <Route element={<RequireAuth allowedRoles={['user']} />}>
             <Route path="content/create" element={<HeaderOnly><CreateContent /></HeaderOnly>} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={['user']} />}>
+            <Route path="content/upload" element={<HeaderOnly><UploadContent /></HeaderOnly>} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['user']} />}>
             <Route path="managevideos" element={<HeaderOnly><ManageVideos /></HeaderOnly>} />

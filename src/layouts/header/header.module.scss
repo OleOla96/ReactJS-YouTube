@@ -141,24 +141,6 @@ label.btn {
   margin-bottom: 0;
 }
 
-.bg-color {
-  background-color: var(--color-avatar);
-  border-radius: 50%;
-}
-
-.bgM-icon {
-  height: calc(var(--heightHeader-item) - 6px);
-  width: calc(var(--heightHeader-item) - 6px);
-  padding: 0;
-  pointer-events: none;
-  color: var(--white);
-  font-size: 2rem;
-  font-weight: 400;
-  line-height: var(--heightHeader-text);
-  text-align: center;
-  user-select: none;
-}
-
 .dropdown-menu {
   display: none;
   position: fixed;

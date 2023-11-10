@@ -18,7 +18,7 @@
   --color-brandIcon-sup: #606060;
   --font-youtube: 'YouTube Sans', 'Roboto', sans-serif;
   --font-family: 'Roboto', 'Arial', sans-serif;
-  --avatar: 128px;
+  --avatar: 160px;
   --toastify-toast-min-height: 48px;
   // Default layout
   --default-layout-header-height: 60px;
@@ -82,10 +82,10 @@ a:hover {
 }
 
 .cardYoutube {
+  display: flex;
   border: none;
   overflow: hidden;
   border-radius: 0;
-
   .card-img-top {
     border-radius: 12px;
     transition: border-radius 0.4s;
@@ -94,30 +94,14 @@ a:hover {
       border-radius: 0;
     }
   }
-  .card-title {
-    margin-bottom: 2px;
-    font-weight: 500;
-    line-height: 2.2rem;
-    max-height: 4.4rem;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    text-overflow: ellipsis;
-    white-space: normal;
-
-    &:hover {
-      opacity: unset;
-    }
-  }
   .card-des {
     color: #606060;
     font-size: 1.2rem;
     font-weight: 400;
     line-height: 2rem;
-    max-height: 4rem;
+    height: 85px;
     overflow: hidden;
-    display: -webkit-box;
+    display: flex;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     text-overflow: ellipsis;
@@ -127,6 +111,68 @@ a:hover {
       color: #0f0f0f;
       cursor: pointer;
     }
+    .inforBase {
+      display: flex;
+      flex-direction: column;
+
+      .card-title {
+        margin-bottom: 2px;
+        font-size: 1.6rem;
+        line-height: 2.2rem;
+        font-weight: 500;
+        max-height: 4.4rem;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        text-overflow: ellipsis;
+        white-space: normal;
+
+        &:hover {
+          opacity: unset;
+        }
+      }
+    }
+  }
+}
+
+.avatar,
+.avatarHeader,
+.avatarMain {
+  color: var(--white);
+  text-align: center;
+  user-select: none;
+  background-color: var(--color-avatar);
+  border-radius: 50%;
+}
+
+.avatar {
+  width: 3.6rem;
+  height: 3.6rem;
+  font-size: 1.8rem;
+  line-height: 3.8rem;
+}
+
+.avatarHeader {
+  height: calc(var(--heightHeader-item) - 8px);
+  width: calc(var(--heightHeader-item) - 8px);
+  padding: 0;
+  pointer-events: none;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: var(--heightHeader-text);
+}
+
+.avatarMain {
+  width: 4rem;
+  height: 4rem;
+  font-size: 2rem;
+  line-height: 4rem;
+  font-weight: 400;
+  margin-right: 8px;
+
+  &a:hover {
+    color: inherit;
   }
 }
 

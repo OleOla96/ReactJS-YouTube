@@ -6,11 +6,12 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import classNames from 'classnames/bind';
 import styles from './watch.scss';
-import axios from '../../common/axios';
-import useContexts from '../../hooks/useContexts';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import axios from '~/common/axios';
+import { BASE_URL } from '~/common/axios';
+import useContexts from '~/hooks/useContexts';
+import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 import { BellIcon, LikeIcon, LikeActionIcon, DisLikeIcon, DisLikeActionIcon, ShareIcon } from '~/components/icons';
-import Button from '~/components/button/Button';
+import Button from '~/components/button';
 
 const cb = classNames.bind(styles);
 
@@ -23,6 +24,10 @@ function Public() {
   const [content, setContent] = useState({});
   const [listVideos, setListVideos] = useState([]);
   const [changeVideo, setChangeVideo] = useState(false);
+  const avatarURL = `${BASE_URL}image/avatar/${content?.avatar}`;
+  const videoURL = `${BASE_URL}video/${content?.linkVideo}`;
+  const extension = ['.mp4', '.mkv', '.mov'];
+  const result = content?.linkVideo && extension.some((ex) => content?.linkVideo.endsWith(ex));
 
   useEffect(() => {
     const getData = async () => {
@@ -68,7 +73,7 @@ function Public() {
       toast.success(res.data.message, {
         position: toast.POSITION.BOTTOM_LEFT,
       });
-      setChangeVideo((pre) => !pre);
+      setContent((pre) => ({ ...pre, follow: v, subscriber: v ? pre.subscriber + 1 : pre.subscriber - 1 }));
     } catch (error) {
       const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
       toast.error(err, {
@@ -83,7 +88,17 @@ function Public() {
         toast.success(res.data.message, {
           position: toast.POSITION.BOTTOM_LEFT,
         });
-      setChangeVideo((pre) => !pre);
+      setContent((pre) => {
+        if (v === true) {
+          return { ...pre, like: pre.like + 1, disLike: pre.disLike > 0 ? pre.disLike - 1 : 0, statusLike: true };
+        } else if (v === false) {
+          return { ...pre, like: pre.like > 0 ? pre.like - 1 : 0, disLike: pre.disLike + 1, statusLike: false };
+        } else if (v === null && t === 'unlike') {
+          return { ...pre, like: pre.like - 1, statusLike: v };
+        } else if (v === null && t === 'undislike') {
+          return { ...pre, disLike: pre.disLike - 1, statusLike: v };
+        }
+      });
     } catch (error) {
       const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
       toast.error(err, {
@@ -99,27 +114,32 @@ function Public() {
     <div className={cb('watch', 'mt-4')}>
       <ToastContainer autoClose={1000} limit={2} />
       <div className={'col-md-12 col-lg-8'}>
-        <div className="resize">
-          <iframe
-            className={cb('screenVideo')}
-            width="854"
-            height="428"
-            src={`https://www.youtube.com/embed/${content?.linkVideo}?autoplay=0`}
-            title={content?.title}
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
+        {result ? (
+          <video className={cb('screenVideo')} src={videoURL} controls />
+        ) : (
+          <div className="resize">
+            <iframe
+              className={cb('screenVideo')}
+              width="854"
+              height="428"
+              src={`https://www.youtube.com/embed/${content?.linkVideo}?autoplay=0`}
+              title={content?.title}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        )}
         <div className={cb('top-row', 'mt-4')}>
           <div className="card-title mb-2">{content?.title}</div>
           <div className="subWarp">
             <div className={cb('left')}>
-              {/* <Button circle to={`channel/${content?.channelName}`} className={cb('avatarDefault')}>
-                {content?.channelName?.slice(0, 1).toUpperCase()}
-              </Button> */}
-              <Link to={`/channel/${content?.channelName}`} className={cb('avatarDefault')}>
-                {content?.channelName?.slice(0, 1).toUpperCase()}
+              <Link to={`channel/${content?.channelName}`}>
+                {content?.avatar ? (
+                  <img src={avatarURL} alt="" className="avatarMain" />
+                ) : (
+                  <div className="avatarMain">{content?.channelName?.slice(0, 1).toUpperCase()}</div>
+                )}
               </Link>
               <div className="inforChanel">
                 <Link to={`channel/${content?.channelName}`} className={cb('text-channel')}>
@@ -133,11 +153,7 @@ function Public() {
                 <></>
               ) : auth.accessToken ? (
                 content?.follow ? (
-                  <Button
-                    primary
-                    onClick={() => handleSubcribe(false)}
-                    leftIcon={<BellIcon className={cb('size-icon')} />}
-                  >
+                  <Button primary onClick={() => handleSubcribe(false)} leftIcon={<BellIcon />}>
                     Subscribed
                   </Button>
                 ) : (
