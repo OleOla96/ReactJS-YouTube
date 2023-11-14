@@ -33,11 +33,11 @@ import {
   GamingIcon,
   NewsIcon,
   SportIcon,
-} from '../../components/icons';
+} from '~/components/icons';
 
 const cb = classname.bind(styles);
 
-function SideEffect({ setSidebarFull, change = true, auth, hanldeLogin }) {
+function SideEffect({ setSidebarFull, change = true, auth, onLogin }) {
   const [hide, setHide] = useState(true);
 
   return (
@@ -129,7 +129,7 @@ function SideEffect({ setSidebarFull, change = true, auth, hanldeLogin }) {
               <div className={cb('signin-sidebar')}>
                 <div className={cb('des-signin')}>Sign in to like videos, comment and subscribe.</div>
                 <Button
-                  onClick={hanldeLogin}
+                  onClick={onLogin}
                   leftIcon={<i className={cb('fa-regular fa-circle-user', 'icon-signin')} />}
                   outline
                   rounded

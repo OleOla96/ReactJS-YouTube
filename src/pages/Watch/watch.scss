@@ -63,14 +63,6 @@
           color: rgb(15, 15, 15);
         }
       }
-      .bg-black {
-        color: var(--white);
-        background-color: var(--black);
-
-        &:hover {
-          opacity: 0.7;
-        }
-      }
     }
     .right {
       display: flex;
@@ -86,11 +78,9 @@
         text-align: center;
         border: none;
         border-radius: 18px;
-        background-color: rgba(0, 0, 0, 0.05);
 
         .btn-child {
           height: 36px;
-          background-color: transparent;
 
           &.start {
             margin-left: -15px;
@@ -100,11 +90,8 @@
             margin-right: -15px;
             border-radius: 0 18px 18px 0;
           }
-          &:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-            &:disabled {
-              background-color: transparent;
-            }
+          &:disabled {
+            background-color: transparent;
           }
         }
         .likeIcon {

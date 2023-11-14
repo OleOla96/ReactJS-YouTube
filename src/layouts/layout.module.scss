@@ -25,3 +25,10 @@
     justify-content: center;
   }
 }
+
+// 791px
+@media (max-width: 49.4375em) {
+  .container > .left {
+    display: none;
+  }
+}

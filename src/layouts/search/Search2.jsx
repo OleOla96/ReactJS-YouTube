@@ -58,11 +58,11 @@ function Search2({ classNames }) {
   };
 
   return (
-    <div className={cb('groupSearchHide', 'showOnMobile')}>
+    <div className={cb('groupSearch', 'showOnMobile')}>
       <input type="checkbox" hidden id="showSearchBox" className={cb('btnSearch-sup')} />
       <div className={cb('groupSearchShow')}>
         <Tippy content="Back">
-          <label htmlFor="showSearchBox" className={cb('show-size-icon', 'mb0')}>
+          <label htmlFor="showSearchBox" className={cb('btn-circle', 'mb0')}>
             <ArrowLeftIcon className={cb('size-icon')} />
           </label>
         </Tippy>
@@ -71,13 +71,17 @@ function Search2({ classNames }) {
             interactive
             visible={showResult && searchResult.length > 0}
             render={(attrs) => (
-              <div className={cb('search-result')} tabIndex="-1" {...attrs}>
-                {searchResult.map((result) => (
-                  <Link to={`watch/${result.linkVideo}`} key={result.id}>
-                    <SearchIcon className={cb('size-icon')} />
-                    <span style={{ whiteSpace: 'pre', wordWrap: 'break-word' }}>{result.title}</span>
-                  </Link>
-                ))}
+              <div className={cb('wrap')}>
+                <div className={cb('whiteSpaceLeft')}></div>
+                <div className={cb('search-result')} tabIndex="-1" {...attrs}>
+                  {searchResult.map((result) => (
+                    <Link to={`watch/${result.linkVideo}`} key={result.id}>
+                      <SearchIcon className={cb('size-icon')} />
+                      <span style={{ whiteSpace: 'pre', wordWrap: 'break-word' }}>{result.title}</span>
+                    </Link>
+                  ))}
+                </div>
+                <div className={cb('whiteSpaceRight')}></div>
               </div>
             )}
             onClickOutside={handleHideResult}
@@ -110,18 +114,18 @@ function Search2({ classNames }) {
           </button>
         </Tippy>
         <Tippy content="Search with your voice">
-          <button className={cb('show-size-icon')}>
+          <button className={cb('btn-circle')}>
             <VoiceIcon className={cb('size-icon')} />
           </button>
         </Tippy>
       </div>
       <Tippy content="Search">
-        <label htmlFor="showSearchBox" className={cb('show-size-icon', 'mr-3', 'mb0')}>
+        <label htmlFor="showSearchBox" className={cb('btn-circle', 'mr-8px', 'mb0')}>
           <SearchIcon className={cb('size-icon')} />
         </label>
       </Tippy>
       <Tippy content="Search with your voice">
-        <button className={cb('show-size-icon', 'hideOnMoblie', 'mr-3')}>
+        <button className={cb('btn-circle', 'hideOnMoblie', 'mr-8px')}>
           <VoiceIcon className={cb('size-icon')} />
         </button>
       </Tippy>

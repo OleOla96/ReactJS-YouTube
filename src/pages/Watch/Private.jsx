@@ -2,11 +2,12 @@ import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect, memo } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 import { BASE_URL } from '~/common/axios';
 import classNames from 'classnames/bind';
 import style from './watch.scss';
-import { LikeIcon, DisLikeIcon, ShareIcon } from '../../components/icons';
+import SideBar from './SideBar';
+import { LikeIcon, DisLikeIcon, ShareIcon } from '~/components/icons';
 
 const cb = classNames.bind(style);
 
@@ -15,23 +16,21 @@ function Private() {
   const axiosPrivate = useAxiosPrivate();
   const [content, setContent] = useState({});
   const [listVideos, setListVideos] = useState([]);
-  const [changeVideo, setChangeVideo] = useState(false);
   const avatarURL = `${BASE_URL}image/avatar/${content?.avatar}`;
-  const videoURL = `${BASE_URL}video/${content?.linkVideo}`;
-
+  const videoURL = `${BASE_URL}video/${content?.videoName}`;
+  const extension = ['.mp4', '.mkv', '.mov'];
+  const videoLocal = content?.videoName && extension.some((ex) => content?.videoName.endsWith(ex));
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await axiosPrivate.get(`myChannel/watch${linkVideo}`);
-        if (res?.data?.length) {
-          const resData = res.data;
-          for (let i in resData) {
-            if (resData[i].linkVideo === linkVideo) {
-              setContent(resData[i]);
-              resData.splice(i, 1);
-              setListVideos(resData);
-              break;
-            }
+        const res = await axiosPrivate.get(`myChannel/watch/${linkVideo}`);
+        const resData = res.data;
+        for (let i in resData) {
+          if (resData[i].linkVideo === linkVideo) {
+            setContent(resData[i]);
+            resData.splice(i, 1);
+            setListVideos(resData);
+            break;
           }
         }
       } catch (error) {
@@ -41,31 +40,29 @@ function Private() {
         });
       }
     };
-
     getData();
-    // eslint-disable-next-line
-  }, [changeVideo]);
+  }, [linkVideo, axiosPrivate]);
 
   return (
     <div className={cb('watch', 'mt-4')}>
       <ToastContainer autoClose={2000} limit={2} />
       <div className={'col-md-12 col-lg-8'}>
-        <div className="resize">
-          {['mp4', 'mkv', 'mov'].some((ex) => content?.linkVideo.endsWith(ex)) ? (
-            <video className={cb('screenVideo')} src={videoURL} />
-          ) : (
+        {videoLocal ? (
+          <video className={cb('screenVideo')} src={videoURL} controls />
+        ) : (
+          <div className="resize">
             <iframe
               className={cb('screenVideo')}
               width="854"
               height="428"
-              src={`https://www.youtube.com/embed/${content?.linkVideo}`}
+              src={`https://www.youtube.com/embed/${content?.linkVideo}?autoplay=0`}
               title={content?.title}
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
-          )}
-        </div>
+          </div>
+        )}
         <div className={cb('top-row', 'mt-4')}>
           <div className="card-title mg-2">{content?.title}</div>
           <div className="subWarp">
@@ -114,45 +111,11 @@ function Private() {
           <div className="text-des">{content?.description}</div>
         </div>
         <div className="col-12 wrapCardSidebar">
-          {listVideos.map((data) => (
-            <div key={data?.id} className={cb('cardSidebar', 'card mb-4')}>
-              <Link to={`/watch/${data?.linkVideo}`} onClick={() => setChangeVideo(!changeVideo)}>
-                <img
-                  className="card-img-top "
-                  src={`https://i.ytimg.com/vi/${data?.linkVideo}/maxresdefault.jpg`}
-                  alt={data?.title}
-                />
-              </Link>
-              <Link to={`/watch/${data?.linkVideo}`} className="card-text">
-                <span className="cardSidebar-title">{data?.title}</span>
-                <span className="cardSidebar-channel">{data?.channelName}</span>
-                <span className="text-infor">
-                  {data?.view} view{data?.view > 1 && 's'}
-                </span>
-              </Link>
-            </div>
-          ))}
+          <SideBar list={listVideos} URL={BASE_URL} extension={extension} />
         </div>
       </div>
       <div className={'col-4'}>
-        {listVideos.map((data) => (
-          <div key={data?.id} className={cb('cardSidebar', 'card mb-4')}>
-            <Link to={`/watch/${data?.linkVideo}`} onClick={() => setChangeVideo(!changeVideo)}>
-              <img
-                className="card-img-top "
-                src={`https://i.ytimg.com/vi/${data?.linkVideo}/maxresdefault.jpg`}
-                alt={data?.title}
-              />
-            </Link>
-            <Link to={`/watch/${data?.linkVideo}`} className="card-text">
-              <span className="cardSidebar-title">{data?.title}</span>
-              <span className="cardSidebar-channel">{data?.channelName}</span>
-              <span className="text-infor">
-                {data?.view} view{data?.view > 1 && 's'}
-              </span>
-            </Link>
-          </div>
-        ))}
+        <SideBar list={listVideos} URL={BASE_URL} extension={extension} />
       </div>
     </div>
   );

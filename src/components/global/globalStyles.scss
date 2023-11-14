@@ -4,7 +4,7 @@
   --primary: #fe2c55;
   --black: #000;
   --white: #fff;
-  --text-color: #161823;
+  --text-color-main: rgba(15, 15, 15, 1);
   --text-color-cardYT: #969696;
   --heightHeader: 56px;
   --heightHeader-item: 40px;
@@ -40,7 +40,7 @@ body {
   font-family: var(--font-family);
   font-size: 1.6rem;
   text-rendering: optimizespeed;
-  color: var(--text-color);
+  color: var(--text-color-main);
 
   .tippy-box {
     border-radius: 8px;
@@ -70,9 +70,13 @@ input,
   border: none;
 }
 
+button {
+  background-color: transparent;
+}
+
 a,
 a:hover {
-  color: rgb(15, 15, 15);
+  color: var(--text-color-main);
   text-decoration: none;
 }
 
@@ -108,7 +112,7 @@ a:hover {
     white-space: normal;
 
     &:hover {
-      color: #0f0f0f;
+      color: var(--text-color-main);
       cursor: pointer;
     }
     .inforBase {
@@ -158,7 +162,7 @@ a:hover {
   width: calc(var(--heightHeader-item) - 8px);
   padding: 0;
   pointer-events: none;
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 400;
   line-height: var(--heightHeader-text);
 }
@@ -166,8 +170,8 @@ a:hover {
 .avatarMain {
   width: 4rem;
   height: 4rem;
-  font-size: 2rem;
-  line-height: 4rem;
+  font-size: 2.2rem;
+  line-height: 4.2rem;
   font-weight: 400;
   margin-right: 8px;
 
@@ -290,6 +294,10 @@ a:hover {
   margin-top: 2rem;
 }
 
+.mr-8px {
+  margin-right: 8px;
+}
+
 .form-check.pl-20 {
   padding-left: 2rem !important;
   line-height: 2rem;
@@ -350,6 +358,7 @@ a:hover {
   border: none;
   border-radius: 50%;
   background-color: transparent;
+  cursor: pointer;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
@@ -366,6 +375,13 @@ a:hover {
   }
 }
 
+// 656px
+@media (max-width: 41em) {
+  .btn-circle.mr-8px {
+    margin-right: 0;
+  }
+}
+
 .btnSidebar {
   width: 210px;
   display: flex;
@@ -376,7 +392,7 @@ a:hover {
   border-radius: 10px;
   padding: 0 12px;
   margin-left: 8px;
-  color: rgb(15, 15, 15);
+  color: var(--text-color-main);
 
   .icon {
     display: flex;
@@ -428,7 +444,7 @@ a:hover {
   }
 
   &:hover {
-    color: rgb(15, 15, 15);
+    color: var(--text-color-main);
     background-color: rgba(0, 0, 0, 0.1);
   }
 
@@ -464,14 +480,19 @@ a:hover {
   align-items: center;
   margin-left: 8px;
   padding: 6px 12px 4px;
-  color: rgb(15, 15, 15);
+  color: var(--text-color-main);
   font-size: 1.6rem;
   line-height: 2.2rem;
   font-weight: 400;
 }
 
 .bg-005 {
-  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-color-main) !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
 }
 
 @media (min-width: 1096px) {

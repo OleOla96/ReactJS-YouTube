@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classname from 'classnames/bind';
-import style from './defaultLayout.module.scss';
-import HeaderMain from './header/HeaderMain';
+import style from './layout.module.scss';
+import Header from './header';
 import Sidebar from './sidebar/Sidebar';
-import useContexts from '../hooks/useContexts';
 
 const cb = classname.bind(style);
 
-function DefaultLayout({ children }) {
-  const { auth, avatar } = useContexts();
+function MainLayout({ children }) {
   const [sidebarFull, setSidebarFull] = useState(window.innerWidth >= 1016);
   const [change, setChange] = useState(false);
 
@@ -26,10 +24,10 @@ function DefaultLayout({ children }) {
 
   return (
     <>
-      <HeaderMain setSidebarFull={setSidebarFull} change={change} auth={auth} avatar={avatar} />
+      <Header setSidebarFull={setSidebarFull} change={change} />
       <div className={cb('container')}>
         <div className={cb('left', { action: sidebarFull })}>
-          <Sidebar sidebarFull={sidebarFull} auth={auth} />
+          <Sidebar sidebarFull={sidebarFull} />
         </div>
         <div className={cb('right')}>{children}</div>
       </div>
@@ -37,8 +35,8 @@ function DefaultLayout({ children }) {
   );
 }
 
-DefaultLayout.propTypes = {
+MainLayout.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default DefaultLayout;
+export default MainLayout;

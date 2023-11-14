@@ -40,6 +40,12 @@
       line-height: 2rem;
       word-wrap: break-word;
     }
+    .icon-signin {
+      width: var(--size-item-default);
+      font-size: calc(var(--size-item-default) - 4px);
+      text-align: center;
+      line-height: calc(var(--size-item-default) + 12px);
+    }
   }
 }
 

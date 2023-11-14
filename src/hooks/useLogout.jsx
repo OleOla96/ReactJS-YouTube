@@ -9,7 +9,7 @@ const useLogout = () => {
   const logout = async () => {
     setAuth({});
     setAvatar();
-    localStorage.removeItem('avatar');
+    localStorage.clear();
     try {
       const res = await axios.get('auth/signout', {
         withCredentials: true,

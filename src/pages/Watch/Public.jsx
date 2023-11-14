@@ -12,6 +12,7 @@ import useContexts from '~/hooks/useContexts';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 import { BellIcon, LikeIcon, LikeActionIcon, DisLikeIcon, DisLikeActionIcon, ShareIcon } from '~/components/icons';
 import Button from '~/components/button';
+import SideBar from './SideBar';
 
 const cb = classNames.bind(styles);
 
@@ -23,37 +24,22 @@ function Public() {
   const axiosPrivate = useAxiosPrivate();
   const [content, setContent] = useState({});
   const [listVideos, setListVideos] = useState([]);
-  const [changeVideo, setChangeVideo] = useState(false);
   const avatarURL = `${BASE_URL}image/avatar/${content?.avatar}`;
-  const videoURL = `${BASE_URL}video/${content?.linkVideo}`;
+  const videoURL = `${BASE_URL}video/${content?.videoName}`;
   const extension = ['.mp4', '.mkv', '.mov'];
-  const result = content?.linkVideo && extension.some((ex) => content?.linkVideo.endsWith(ex));
+  const videoLocal = content?.videoName && extension.some((ex) => content?.videoName.endsWith(ex));
 
   useEffect(() => {
     const getData = async () => {
       try {
         if (!auth.accessToken) {
-          const res = await axios.get(`show/watch${linkVideo}`);
-          const resData = res.data;
-          for (let i in resData) {
-            if (resData[i].linkVideo === linkVideo) {
-              setContent(resData[i]);
-              resData.splice(i, 1);
-              setListVideos(resData);
-              break;
-            }
-          }
+          const res = await axios.get(`show/watch/${linkVideo}`);
+          setContent(res.data.watch);
+          setListVideos(res.data.list);
         } else {
-          const res = await axiosPrivate.get(`show/watch${linkVideo}`);
-          const resData = res.data;
-          for (let i in resData) {
-            if (resData[i].linkVideo === linkVideo) {
-              setContent(resData[i]);
-              resData.splice(i, 1);
-              setListVideos(resData);
-              break;
-            }
-          }
+          const res = await axiosPrivate.get(`show/watch/${linkVideo}`);
+          setContent(res.data.watch);
+          setListVideos(res.data.list);
         }
       } catch (error) {
         const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
@@ -62,10 +48,9 @@ function Public() {
         });
       }
     };
-
     getData();
     // eslint-disable-next-line
-  }, [changeVideo]);
+  }, [linkVideo]);
 
   const handleSubcribe = async (v) => {
     try {
@@ -73,7 +58,8 @@ function Public() {
       toast.success(res.data.message, {
         position: toast.POSITION.BOTTOM_LEFT,
       });
-      setContent((pre) => ({ ...pre, follow: v, subscriber: v ? pre.subscriber + 1 : pre.subscriber - 1 }));
+      const { statusFollow, subscriber } = res.data;
+      setContent({ ...content, statusFollow, user: { ...content.user, subscriber } });
     } catch (error) {
       const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
       toast.error(err, {
@@ -88,17 +74,8 @@ function Public() {
         toast.success(res.data.message, {
           position: toast.POSITION.BOTTOM_LEFT,
         });
-      setContent((pre) => {
-        if (v === true) {
-          return { ...pre, like: pre.like + 1, disLike: pre.disLike > 0 ? pre.disLike - 1 : 0, statusLike: true };
-        } else if (v === false) {
-          return { ...pre, like: pre.like > 0 ? pre.like - 1 : 0, disLike: pre.disLike + 1, statusLike: false };
-        } else if (v === null && t === 'unlike') {
-          return { ...pre, like: pre.like - 1, statusLike: v };
-        } else if (v === null && t === 'undislike') {
-          return { ...pre, disLike: pre.disLike - 1, statusLike: v };
-        }
-      });
+      const { like, disLike, statusLike } = res.data;
+      setContent({ ...content, like, disLike, statusLike });
     } catch (error) {
       const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
       toast.error(err, {
@@ -110,11 +87,12 @@ function Public() {
   const hanldeLogin = () => {
     navigate('/login', { state: { from: pathname } });
   };
+
   return (
     <div className={cb('watch', 'mt-4')}>
-      <ToastContainer autoClose={1000} limit={2} />
+      <ToastContainer autoClose={1000} limit={1} />
       <div className={'col-md-12 col-lg-8'}>
-        {result ? (
+        {videoLocal ? (
           <video className={cb('screenVideo')} src={videoURL} controls />
         ) : (
           <div className="resize">
@@ -134,45 +112,45 @@ function Public() {
           <div className="card-title mb-2">{content?.title}</div>
           <div className="subWarp">
             <div className={cb('left')}>
-              <Link to={`channel/${content?.channelName}`}>
-                {content?.avatar ? (
+              <Link to={`channel/${content?.user?.channelName}`}>
+                {content?.user?.avatar ? (
                   <img src={avatarURL} alt="" className="avatarMain" />
                 ) : (
-                  <div className="avatarMain">{content?.channelName?.slice(0, 1).toUpperCase()}</div>
+                  <div className="avatarMain">{content?.user?.channelName?.slice(0, 1).toUpperCase()}</div>
                 )}
               </Link>
               <div className="inforChanel">
-                <Link to={`channel/${content?.channelName}`} className={cb('text-channel')}>
-                  {content?.channelName}
+                <Link to={`channel/${content?.user?.channelName}`} className={cb('text-channel')}>
+                  {content?.user?.channelName}
                 </Link>
                 <span className={cb('text-infor')}>
-                  {content?.subscriber} subcriber{content?.subscriber > 1 && 's'}
+                  {content?.user?.subscriber} subcriber{content?.user?.subscriber > 1 && 's'}
                 </span>
               </div>
-              {content.username === auth.username ? (
+              {content?.user?.username === auth.username ? (
                 <></>
               ) : auth.accessToken ? (
-                content?.follow ? (
-                  <Button primary onClick={() => handleSubcribe(false)} leftIcon={<BellIcon />}>
+                content?.statusFollow ? (
+                  <Button primary onClick={() => handleSubcribe(false)} leftIcon={<BellIcon />} className="bg-005">
                     Subscribed
                   </Button>
                 ) : (
-                  <Button onClick={() => handleSubcribe(true)} primary className={'bg-black'}>
+                  <Button primary onClick={() => handleSubcribe(true)}>
                     Subscribe
                   </Button>
                 )
               ) : (
-                <Button onClick={hanldeLogin} primary className={'bg-black'}>
+                <Button onClick={hanldeLogin} primary>
                   Subscribe
                 </Button>
               )}
             </div>
             <div className={cb('right')}>
-              <div className="btn-multi">
+              <div className="btn-multi bg-005">
                 {content?.statusLike === true ? (
                   <Tippy content="Unlike" placement="bottom">
                     <button
-                      disabled={content.username === auth.username}
+                      disabled={content?.user?.username === auth?.username}
                       onClick={() => handleLike(null, 'unlike')}
                       className={cb('btn-child', 'start', 'px-4')}
                     >
@@ -183,7 +161,7 @@ function Public() {
                 ) : (
                   <Tippy content="I like this" placement="bottom">
                     <button
-                      disabled={content.username === auth.username}
+                      disabled={content?.user?.username === auth?.username}
                       onClick={() => (auth?.accessToken ? handleLike(true) : hanldeLogin())}
                       className={cb('btn-child', 'start', 'px-4')}
                     >
@@ -196,7 +174,7 @@ function Public() {
                 {content?.statusLike === false ? (
                   <Tippy content="Undislike" placement="bottom">
                     <button
-                      disabled={content.username === auth.username}
+                      disabled={content?.user?.username === auth.username}
                       onClick={() => handleLike(null, 'undislike')}
                       className={cb('btn-child', 'end', 'px-4')}
                     >
@@ -207,7 +185,7 @@ function Public() {
                 ) : (
                   <Tippy content="I dislike this" placement="bottom">
                     <button
-                      disabled={content.username === auth.username}
+                      disabled={content?.user?.username === auth.username}
                       onClick={() => (auth?.accessToken ? handleLike(false) : hanldeLogin())}
                       className={cb('btn-child', 'end', 'px-4')}
                     >
@@ -218,7 +196,7 @@ function Public() {
                 )}
               </div>
               <div className="ml-3">
-                <Button primary leftIcon={<ShareIcon />}>
+                <Button primary leftIcon={<ShareIcon />} className="bg-005">
                   Share
                 </Button>
               </div>
@@ -232,45 +210,11 @@ function Public() {
           <div className="text-des">{content?.description}</div>
         </div>
         <div className="col-12 wrapCardSidebar">
-          {listVideos.map((data) => (
-            <div key={data?.id} className={cb('cardSidebar', 'card mb-4')}>
-              <Link to={`/watch/${data?.linkVideo}`} onClick={() => setChangeVideo(!changeVideo)}>
-                <img
-                  className="card-img-top "
-                  src={`https://i.ytimg.com/vi/${data?.linkVideo}/maxresdefault.jpg`}
-                  alt={data?.title}
-                />
-              </Link>
-              <Link to={`/watch/${data?.linkVideo}`} className="card-text">
-                <span className="cardSidebar-title">{data?.title}</span>
-                <span className="cardSidebar-channel">{data?.channelName}</span>
-                <span className="text-infor">
-                  {data?.view} view{data?.view > 1 && 's'}
-                </span>
-              </Link>
-            </div>
-          ))}
+          <SideBar list={listVideos} URL={BASE_URL} extension={extension} />
         </div>
       </div>
       <div className={'col-4'}>
-        {listVideos.map((data) => (
-          <div key={data?.id} className={cb('cardSidebar', 'card mb-4')}>
-            <Link to={`/watch/${data?.linkVideo}`} onClick={() => setChangeVideo(!changeVideo)}>
-              <img
-                className="card-img-top "
-                src={`https://i.ytimg.com/vi/${data?.linkVideo}/maxresdefault.jpg`}
-                alt={data?.title}
-              />
-            </Link>
-            <Link to={`/watch/${data?.linkVideo}`} className="card-text">
-              <span className="cardSidebar-title">{data?.title}</span>
-              <span className="cardSidebar-channel">{data?.channelName}</span>
-              <span className="text-infor">
-                {data?.view} view{data?.view > 1 && 's'}
-              </span>
-            </Link>
-          </div>
-        ))}
+        <SideBar list={listVideos} URL={BASE_URL} extension={extension} />
       </div>
     </div>
   );

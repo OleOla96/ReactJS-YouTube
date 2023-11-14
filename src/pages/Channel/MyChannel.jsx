@@ -17,6 +17,7 @@ const MyChannel = () => {
   const { auth, avatar, setAvatar } = useContexts();
   const [contents, setContents] = useState([]);
   const [user, setUser] = useState({});
+  const extension = ['.mp4', '.mkv', '.mov'];
   const avatarURL = avatar ? `${BASE_URL}image/avatar/${avatar}` : avatar;
 
   const [changeAvatar, setChangeAvatar] = useState(false);
@@ -26,7 +27,7 @@ const MyChannel = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axiosPrivate.get('roles/user');
+        const res = await axiosPrivate.get('mychannel');
         setContents(res.data.contents);
         setUser(res.data.user);
         const _avatar = res.data.user.avatar;
@@ -104,12 +105,22 @@ const MyChannel = () => {
           contents.map((content) => (
             <div className="col-sm-6 col-lg-4" key={content.id}>
               <div className={'cardYoutube card mt-4'}>
-                <Link to={`watch/${content.linkVideo}`}>
-                  <img
-                    className="card-img-top"
-                    src={`https://i.ytimg.com/vi/${content.linkVideo}/maxresdefault.jpg`}
-                    alt={content.title}
-                  />
+                <Link to={`watch/${content?.linkVideo}`}>
+                  {content?.videoName && extension.some((ex) => content?.videoName.endsWith(ex)) ? (
+                    <video
+                      loading="lazy"
+                      className="card-img-top"
+                      src={`${BASE_URL}video/${content?.videoName}`}
+                      alt={content?.title}
+                    />
+                  ) : (
+                    <img
+                      loading="lazy"
+                      className="card-img-top"
+                      src={`https://i.ytimg.com/vi/${content?.linkVideo}/maxresdefault.jpg`}
+                      alt={content?.title}
+                    />
+                  )}
                 </Link>
                 <div className="card-des mt-4">
                   <div className="mr-3">

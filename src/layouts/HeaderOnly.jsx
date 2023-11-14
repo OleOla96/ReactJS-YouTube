@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import classname from 'classnames/bind';
-import style from './defaultLayout.module.scss';
-import Header from './header/Header';
+import style from './layout.module.scss';
+import Header from './header';
 import useContexts from '../hooks/useContexts';
 
 const cb = classname.bind(style);
@@ -9,10 +9,12 @@ const cb = classname.bind(style);
 function HeaderOnly({ children }) {
   const { auth, avatar } = useContexts();
   return (
-    <div className={cb('container')}>
+    <>
       <Header auth={auth} avatar={avatar} />
-      <div className={cb('right')}>{children}</div>
-    </div>
+      <div className={cb('container')}>
+        <div className={cb('right')}>{children}</div>
+      </div>
+    </>
   );
 }
 

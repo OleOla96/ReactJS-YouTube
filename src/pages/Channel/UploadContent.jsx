@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
@@ -19,10 +19,12 @@ const UploadContent = () => {
   const [video, setVideo] = useState();
   const [loading, setLoading] = useState(false);
   const [submit, setSubmit] = useState(false);
+  const [autofill, setAutofill] = useState(true);
+  console.log(video);
+  const inputRef = useRef();
 
   useEffect(() => {
     if (dataReq.title && video) {
-      console.log('here');
       setSubmit(true);
     } else setSubmit(false);
   }, [dataReq.title, video]);
@@ -44,7 +46,9 @@ const UploadContent = () => {
     try {
       const res = await axiosPrivate.put('crud/upload', formData);
       setLoading(false);
+      setVideo(null);
       setDataReq(initialData);
+      inputRef.current.value = '';
       toast.success(res.data.message, {
         position: toast.POSITION.TOP_CENTER,
       });
@@ -64,6 +68,20 @@ const UploadContent = () => {
         <h2 className={cb('card-title', 'text-center')}>Upload Content</h2>
         <div className="form-row">
           <div className="col-md-12 mb-3">
+            <input
+              ref={inputRef}
+              type="file"
+              name="video"
+              id="video"
+              className="form-control-file"
+              onChange={(e) => {
+                setVideo(e.target.files[0]);
+                if (autofill) setDataReq({ ...dataReq, title: e.target.files[0].name.slice(0, -3) });
+              }}
+              required
+            />
+          </div>
+          <div className="col-md-12">
             <label htmlFor="title">Title</label>
             <input
               autoFocus
@@ -73,18 +91,21 @@ const UploadContent = () => {
               className={cb('form-input')}
               value={dataReq.title}
               onChange={handleInputChange}
+              readOnly={autofill}
               required
             />
           </div>
-          <div className="col-md-12 mb-3">
+          <div className="col-md-12 ml-4 mb-3">
             <input
-              type="file"
-              name="video"
-              id="video"
-              className="form-control-file"
-              onChange={(e) => setVideo(e.target.files[0])}
-              required
+              type="checkbox"
+              id="allow"
+              className="form-check-input mt-2"
+              checked={autofill}
+              onChange={() => setAutofill(!autofill)}
             />
+            <label htmlFor="allow" className="ml-2">
+              <small className="form-text text-muted mt-0">Dynamically use the file name as the title.</small>
+            </label>
           </div>
           <div className="col-md-12 mb-3">
             <label htmlFor="description">Description</label>

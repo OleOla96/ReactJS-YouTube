@@ -3,12 +3,12 @@
   height: var(--heightHeader-item);
   width: 100%;
   padding: 0 4px;
+
   .headlessTippy {
     display: inherit;
     height: inherit;
     flex: 0 1 540px;
   }
-
   .wrap {
     display: flex;
     width: 100vw;
@@ -132,15 +132,15 @@
   color: var(--color-icon);
 }
 
-//700px
-@media only screen and (max-width: 40em) {
+//656px
+@media only screen and (max-width: 41em) {
   .showOnPC {
     display: none;
   }
 }
 
-//700px
-@media only screen and (max-width: 744px) {
+//780px
+@media only screen and (max-width: 780px) {
   .searchBox,
   .groupSearch {
     margin: auto;

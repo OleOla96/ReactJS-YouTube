@@ -41,11 +41,11 @@ const Home = () => {
         <div className="col-sm-6 col-lg-4" key={content?.id}>
           <div className={'cardYoutube card mt-4'}>
             <Link to={`watch/${content?.linkVideo}`}>
-              {content?.linkVideo && extension.some((ex) => content?.linkVideo.endsWith(ex)) ? (
+              {content?.videoName && extension.some((ex) => content?.videoName.endsWith(ex)) ? (
                 <video
                   loading="lazy"
                   className="card-img-top"
-                  src={`${BASE_URL}video/${content?.linkVideo}`}
+                  src={`${BASE_URL}video/${content?.videoName}`}
                   alt={content?.title}
                 />
               ) : (

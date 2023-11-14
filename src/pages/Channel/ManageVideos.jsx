@@ -32,7 +32,7 @@ const ManageVideo = () => {
           position: toast.POSITION.TOP_CENTER,
         });
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [submitted]);
 
   const handleDelete = (id) => {

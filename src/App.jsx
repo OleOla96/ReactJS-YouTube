@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap';
 
 import HeaderOnly from './layouts/HeaderOnly';
-import DefaultLayout from './layouts/DefaultLayout';
+import MainLayout from './layouts/MainLayout';
 import RequireAuth from './pages/RequireAuth';
 import PersistLogin from './pages/PersistLogin';
 
@@ -30,7 +30,7 @@ function App() {
         <Route path="register" element={<HeaderOnly><Register /></HeaderOnly>} />
         <Route path="test" element={<HeaderOnly><Image /></HeaderOnly>} />
         <Route element={<PersistLogin />}>
-          <Route path="/" element={<DefaultLayout><Home /></DefaultLayout>} />
+          <Route path="/" element={<MainLayout><Home /></MainLayout>} />
           <Route path="watch/:linkVideo" element={<HeaderOnly><WatchVideoPublic /></HeaderOnly>} />
           <Route element={<RequireAuth allowedRoles={['user']} />}>
             <Route path="content/create" element={<HeaderOnly><CreateContent /></HeaderOnly>} />
@@ -48,14 +48,14 @@ function App() {
             <Route path="moderator" element={<HeaderOnly><Moderator /></HeaderOnly>} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['user']} />}>
-            <Route path="channel" element={<DefaultLayout><MyChannel /></DefaultLayout>} />
+            <Route path="channel" element={<MainLayout><MyChannel /></MainLayout>} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['user']} />}>
             <Route path="channel/watch/:linkVideo" element={<HeaderOnly><WatchVideoPrivate /></HeaderOnly>} />
           </Route>
         </Route>
         <Route path="unauthorized" element={<Unauthorized />} />
-        <Route path="*" element={<DefaultLayout><Missing /></DefaultLayout>} />
+        <Route path="*" element={<MainLayout><Missing /></MainLayout>} />
       </Routes>
     </BrowserRouter>
   );
