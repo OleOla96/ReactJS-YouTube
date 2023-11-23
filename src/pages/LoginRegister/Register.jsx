@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
@@ -12,6 +13,7 @@ const cb = classname.bind(styles);
 
 function Register() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -39,13 +41,17 @@ function Register() {
         .oneOf([Yup.ref('password'), null], 'The re-entered password does not match'),
     }),
     onSubmit: async (values) => {
+      setLoading(true);
+      setTimeout(() => {
+        window.alert('Stop');
+      }, 0);
       try {
         const { username, email, password } = values;
-        const res = await axios.post('auth/signup', { username, email, password });
-        if (res) {
-          navigate('/login', { state: { message: 'You have successfully registered' } });
-        }
+        await axios.post('auth/signup', { username, email, password });
+        setLoading(false);
+        navigate('/login', { state: { message: 'You have successfully registered' } });
       } catch (error) {
+        setLoading(false);
         const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
         toast.error(err, {
           position: toast.POSITION.TOP_CENTER,
@@ -136,10 +142,11 @@ function Register() {
 
           <div className="form-group mt5">
             <button
-              className={cb('btn-round btn-primary btn-block', 'btn-state')}
+              className="btn-round btn-primary btn-block btn-state"
               disabled={!(formik.dirty && formik.isValid)}
               type="submit"
             >
+              {loading && <i style={{ lineHeight: 'inherit' }} className="fas fa-spinner fa-pulse mr-3" />}
               Sign Up
             </button>
           </div>

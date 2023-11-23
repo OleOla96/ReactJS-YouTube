@@ -16,23 +16,17 @@ function Private() {
   const axiosPrivate = useAxiosPrivate();
   const [content, setContent] = useState({});
   const [listVideos, setListVideos] = useState([]);
-  const avatarURL = `${BASE_URL}image/avatar/${content?.avatar}`;
+  const avatarURL = `${BASE_URL}image/avatar/${content?.user?.avatar}`;
   const videoURL = `${BASE_URL}video/${content?.videoName}`;
   const extension = ['.mp4', '.mkv', '.mov'];
   const videoLocal = content?.videoName && extension.some((ex) => content?.videoName.endsWith(ex));
+
   useEffect(() => {
     const getData = async () => {
       try {
         const res = await axiosPrivate.get(`myChannel/watch/${linkVideo}`);
-        const resData = res.data;
-        for (let i in resData) {
-          if (resData[i].linkVideo === linkVideo) {
-            setContent(resData[i]);
-            resData.splice(i, 1);
-            setListVideos(resData);
-            break;
-          }
-        }
+        setContent(res.data.watch);
+        setListVideos(res.data.list);
       } catch (error) {
         const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
         toast.error(err, {
@@ -41,16 +35,17 @@ function Private() {
       }
     };
     getData();
-  }, [linkVideo, axiosPrivate]);
+    // eslint-disable-next-line
+  }, [linkVideo]);
 
   return (
     <div className={cb('watch', 'mt-4')}>
       <ToastContainer autoClose={2000} limit={2} />
       <div className={'col-md-12 col-lg-8'}>
-        {videoLocal ? (
-          <video className={cb('screenVideo')} src={videoURL} controls />
-        ) : (
-          <div className="resize">
+        <div className="resize">
+          {videoLocal ? (
+            <video className={cb('screenVideo')} src={videoURL} controls />
+          ) : (
             <iframe
               className={cb('screenVideo')}
               width="854"
@@ -61,25 +56,25 @@ function Private() {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
-          </div>
-        )}
+          )}
+        </div>
         <div className={cb('top-row', 'mt-4')}>
-          <div className="card-title mg-2">{content?.title}</div>
+          <div className="card-title">{content?.title}</div>
           <div className="subWarp">
             <div className="left">
-              <Link to={`channel/${content?.channelName}`}>
-                {content?.avatar ? (
-                  <img src={avatarURL} alt="" className="avatarMain" />
+              <Link to={`channel/${content?.user?.channelName}`}>
+                {content?.user?.avatar ? (
+                  <img src={avatarURL} alt="avatar" className="avatarMain" />
                 ) : (
-                  <div className="avatarMain">{content?.channelName?.slice(0, 1).toUpperCase()}</div>
+                  <div className="avatarMain">{content?.user?.channelName?.slice(0, 1).toUpperCase()}</div>
                 )}
               </Link>
               <div className="inforChanel">
-                <Link to={`channel/${content?.channelName}`} className={cb('text-channel')}>
-                  {content?.channelName}
+                <Link to={`channel/${content?.user?.channelName}`} className={cb('text-channel')}>
+                  {content?.user?.channelName}
                 </Link>
                 <span className={cb('text-infor')}>
-                  {content?.subscriber} subcriber{content?.subscriber > 1 && 's'}
+                  {content?.user?.subscriber} subcriber{content?.user?.subscriber > 1 && 's'}
                 </span>
               </div>
             </div>

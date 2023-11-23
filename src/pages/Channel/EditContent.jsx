@@ -1,5 +1,6 @@
 import { useState, useEffect, memo } from 'react';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import Button from '~/components/button/Button';
 import classname from 'classnames/bind';
 import styles from './createEdit.module.scss';
 
@@ -10,22 +11,22 @@ const EditContent = ({ contentEdit, setEdit, setSubmitted, toast }) => {
   const initialData = {
     id: contentEdit.id,
     title: contentEdit.title,
+    videoName: contentEdit.videoName,
     description: contentEdit.description,
-    linkVideo: contentEdit.linkVideo,
-    stateContent: contentEdit.stateContent,
+    published: contentEdit.published,
   };
   const [dataReq, setDataReq] = useState(initialData);
-  const [stateContent, setStateContent] = useState(initialData.stateContent);
+  const [stateContent, setStateContent] = useState(initialData.published);
   const [loading, setLoading] = useState(false);
   const [allowSubmit, setAllowSubmit] = useState(false);
 
   useEffect(() => {
-    if (dataReq.title && dataReq.linkVideo) setAllowSubmit(true);
+    if ((dataReq.title && dataReq.videoName) || dataReq.title) setAllowSubmit(true);
     else setAllowSubmit(false);
-  }, [dataReq.title, dataReq.linkVideo]);
+  }, [dataReq.title, dataReq.videoName]);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
     setDataReq({ ...dataReq, [name]: value });
   };
   const handleUpdate = async (e) => {
@@ -36,15 +37,14 @@ const EditContent = ({ contentEdit, setEdit, setSubmitted, toast }) => {
       stateContent,
     };
     try {
-      const res = await axiosPrivate.patch('crud/update', data);
-      if (res) {
-        setLoading(false);
-        setEdit(false);
-        setSubmitted(true);
-        toast.success(res.data.message, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-      }
+      const res = await axiosPrivate.patch('crud/editcontent', data);
+
+      setLoading(false);
+      setEdit(false);
+      setSubmitted(true);
+      toast.success(res.data.message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     } catch (error) {
       setLoading(false);
       const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
@@ -57,7 +57,7 @@ const EditContent = ({ contentEdit, setEdit, setSubmitted, toast }) => {
   return (
     <div className="backgroud-overlay">
       <form onSubmit={handleUpdate} className={cb('card-validate')}>
-        <h2 className={cb('card-title', 'text-center')}>Update Content</h2>
+        <h2 className={cb('card-title', 'text-center')}>Edit Content</h2>
         <button className="btn-close" onClick={() => setEdit(false)}>
           &times;
         </button>
@@ -76,15 +76,15 @@ const EditContent = ({ contentEdit, setEdit, setSubmitted, toast }) => {
             />
           </div>
           <div className="col-md-6 mb-3">
-            <label htmlFor="linkVideo">Link Video</label>
+            <label htmlFor="videoName">Video Name</label>
             <input
               type="text"
-              name="linkVideo"
-              id="linkVideo"
+              name="videoName"
+              id="videoName"
               className={cb('form-input')}
-              value={dataReq.linkVideo}
+              value={dataReq.videoName}
               onChange={handleInputChange}
-              required
+              readOnly
             />
           </div>
           <div className="col-md-12 mb-3">
@@ -113,11 +113,11 @@ const EditContent = ({ contentEdit, setEdit, setSubmitted, toast }) => {
             Public
           </label>
         </div>
-        <div className="form-group">
-          <button className={cb('btn-round', 'btn-primary btn-state')} disabled={!allowSubmit || loading}>
+        <div className="col-md-6 mx-auto">
+          <Button rounded submit className={cb('btn-round')} disabled={!allowSubmit || loading}>
             {loading && <span className="spinner-border spinner-border-sm"></span>}
             Update
-          </button>
+          </Button>
         </div>
       </form>
     </div>

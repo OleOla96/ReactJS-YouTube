@@ -282,10 +282,6 @@ a:hover {
   display: none;
 }
 
-.mb0 {
-  margin-bottom: 0;
-}
-
 .mr5 {
   margin-right: 2.4rem;
 }
@@ -372,6 +368,19 @@ a:hover {
     width: var(--heightHeader-item);
     padding: 8px;
     color: var(--color-icon);
+  }
+}
+
+.btn-edit {
+  color: #e0a800;
+  &:hover {
+    color: #ffc107;
+  }
+}
+.btn-delete {
+  color: red;
+  &:hover {
+    color: rgba(255, 0, 0, 0.7);
   }
 }
 

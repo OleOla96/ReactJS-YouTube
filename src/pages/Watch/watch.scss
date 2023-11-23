@@ -14,7 +14,8 @@
 
 .resize iframe,
 .resize object,
-.resize embed {
+.resize embed,
+.resize video {
   position: absolute;
   top: 0;
   left: 0;
@@ -31,7 +32,7 @@
 
 .top-row {
   .card-title {
-    margin-bottom: 2px;
+    margin-bottom: 8px;
     color: rgb(15, 15, 15);
     font-size: 2rem;
     font-weight: 600;

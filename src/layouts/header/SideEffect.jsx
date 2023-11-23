@@ -74,8 +74,8 @@ function SideEffect({ setSidebarFull, change = true, auth, onLogin }) {
           />
           <div className={cb('dropdown-divider')}></div>
           <SidebarItem
-            title="Library"
-            link={'/library'}
+            title="Your Channel"
+            link={'/channel'}
             icon={<YourChannelIcon />}
             activeIcon={<YourChannelActiveIcon />}
           />

@@ -36,7 +36,6 @@ const MyChannel = () => {
           localStorage.setItem('avatar', _avatar);
         }
       } catch (error) {
-        console.log(error);
         const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
         toast.error(err, {
           position: toast.POSITION.TOP_CENTER,

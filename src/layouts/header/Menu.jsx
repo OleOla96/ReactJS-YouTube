@@ -1,20 +1,24 @@
 import { Link, useNavigate } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
 import className from 'classnames/bind';
 import styles from './header.module.scss';
 import { BASE_URL } from '~/common/axios';
 import useLogout from '~/hooks/useLogout';
-import { ChannelIcon, SingoutIcon, StudioIcon, SwitchIcon } from '~/components/icons';
+import { ChannelIcon, ManagerIcon, SingoutIcon, StudioIcon, SwitchIcon } from '~/components/icons';
 
 const cb = className.bind(styles);
 
 export default function Menu({ auth, avatar }) {
+  const decoded = auth?.accessToken ? jwt_decode(auth.accessToken) : undefined;
+  const roles = decoded?.roles || [];
   const avatarURL = avatar ? `${BASE_URL}image/avatar/${avatar}` : avatar;
   const _logOut = useLogout();
   const navigate = useNavigate();
   const logOut = async () => {
-    await _logOut();
     navigate('/');
+    await _logOut();
   };
+
   return (
     <>
       <input type="checkbox" hidden id="checkDropdown" className={cb('checkDropdown-menu')} />
@@ -42,6 +46,19 @@ export default function Menu({ auth, avatar }) {
           </div>
         </div>
         <div className={cb('dropdown-divider')}></div>
+        {roles.find((role) => role === 'admin') ? (
+          <Link className={cb('dropdown-item')} to={'/admin'}>
+            <ManagerIcon className={cb('size-icon', 'item')} />
+            Admin
+          </Link>
+        ) : roles.find((role) => role === 'moderator') ? (
+          <Link className={cb('dropdown-item')} to={'/moderator'}>
+            <ManagerIcon className={cb('size-icon', 'item')} />
+            Moderator
+          </Link>
+        ) : (
+          <></>
+        )}
         <Link className={cb('dropdown-item')} to={'/channel'}>
           <ChannelIcon className={cb('size-icon', 'item')} />
           Your channel
@@ -54,7 +71,7 @@ export default function Menu({ auth, avatar }) {
           <SwitchIcon className={cb('size-icon', 'item')} />
           Switch account
         </div>
-        <button className={cb('dropdown-item', 'text-left')} onClick={logOut}>
+        <button className={cb('dropdown-item', 'text-left mb-3')} onClick={logOut}>
           <SingoutIcon className={cb('size-icon', 'item')} />
           Sign-out
         </button>

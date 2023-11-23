@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap';
 
@@ -20,41 +20,38 @@ import Admin from './pages/Roles/Admin';
 import Moderator from './pages/Roles/Moderator';
 import Unauthorized from './pages/Unauthorized';
 import Missing from './pages/Missing';
-import Image from './pages/Image';
+import DetailContent from './pages/Channel/DetailContent';
 // prettier-ignore
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<HeaderOnly><Register /></HeaderOnly>} />
-        <Route path="test" element={<HeaderOnly><Image /></HeaderOnly>} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<HeaderOnly><Register /></HeaderOnly>} />
         <Route element={<PersistLogin />}>
           <Route path="/" element={<MainLayout><Home /></MainLayout>} />
-          <Route path="watch/:linkVideo" element={<HeaderOnly><WatchVideoPublic /></HeaderOnly>} />
+          <Route path="/home" element={<Navigate to="/" replace />} />
+          <Route path="/watch/:linkVideo" element={<HeaderOnly><WatchVideoPublic /></HeaderOnly>} />
           <Route element={<RequireAuth allowedRoles={['user']} />}>
-            <Route path="content/create" element={<HeaderOnly><CreateContent /></HeaderOnly>} />
-          </Route>
-          <Route element={<RequireAuth allowedRoles={['user']} />}>
-            <Route path="content/upload" element={<HeaderOnly><UploadContent /></HeaderOnly>} />
-          </Route>
-          <Route element={<RequireAuth allowedRoles={['user']} />}>
-            <Route path="managevideos" element={<HeaderOnly><ManageVideos /></HeaderOnly>} />
+            <Route path="/create-link" element={<HeaderOnly><CreateContent /></HeaderOnly>} />
+            <Route path="/upload" element={<HeaderOnly><UploadContent /></HeaderOnly>} />
+            <Route path="/managevideos">
+              <Route index element={<HeaderOnly><ManageVideos /></HeaderOnly>} />
+              <Route path="detail/:id" element={<HeaderOnly><DetailContent /></HeaderOnly>} />
+            </Route>
+            <Route path="/channel">
+              <Route index element={<MainLayout><MyChannel /></MainLayout>} />
+              <Route path="watch/:linkVideo" element={<HeaderOnly><WatchVideoPrivate /></HeaderOnly>} />
+            </Route>
           </Route>
           <Route element={<RequireAuth allowedRoles={['admin']} />}>
-            <Route path="admin" element={<HeaderOnly><Admin /></HeaderOnly>} />
+            <Route path="/admin" element={<HeaderOnly><Admin /></HeaderOnly>} />
           </Route>
           <Route element={<RequireAuth allowedRoles={['moderator']} />}>
-            <Route path="moderator" element={<HeaderOnly><Moderator /></HeaderOnly>} />
-          </Route>
-          <Route element={<RequireAuth allowedRoles={['user']} />}>
-            <Route path="channel" element={<MainLayout><MyChannel /></MainLayout>} />
-          </Route>
-          <Route element={<RequireAuth allowedRoles={['user']} />}>
-            <Route path="channel/watch/:linkVideo" element={<HeaderOnly><WatchVideoPrivate /></HeaderOnly>} />
+            <Route path="/moderator" element={<HeaderOnly><Moderator /></HeaderOnly>} />
           </Route>
         </Route>
-        <Route path="unauthorized" element={<Unauthorized />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<MainLayout><Missing /></MainLayout>} />
       </Routes>
     </BrowserRouter>

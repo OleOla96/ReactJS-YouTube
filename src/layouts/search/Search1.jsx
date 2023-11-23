@@ -30,13 +30,13 @@ function Search1() {
     const fetchApi = async () => {
       setLoading(true);
 
-      const result = await axios.get(`search/title?q=${title}`);
+      const result = await axios.get(`search/title?q=${encodeURIComponent(title)}`);
       setSearchResult(result.data);
       setLoading(false);
     };
 
     fetchApi();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [title]);
 
   const handleClear = () => {

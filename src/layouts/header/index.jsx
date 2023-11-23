@@ -3,7 +3,6 @@ import useContexts from '~/hooks/useContexts';
 import className from 'classnames/bind';
 import styles from './header.module.scss';
 import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
 import Search1 from '../search/Search1';
 import Search2 from '../search/Search2';
 import SideEffect from './SideEffect';
@@ -16,6 +15,7 @@ const cb = className.bind(styles);
 function HeaderMain({ setSidebarFull, change }) {
   const { auth, avatar } = useContexts();
   const { pathname } = useLocation();
+
   const navigate = useNavigate();
   const hanldeLogin = () => {
     navigate('/login', { state: { from: pathname } });
@@ -51,11 +51,11 @@ function HeaderMain({ setSidebarFull, change }) {
             </label>
           </Tippy>
           <div className={cb('dropdown-menu-create')}>
-            <Link to={'/content/upload'} className={cb('dropdown-item')}>
+            <Link to={'/create-link'} className={cb('btn mt-3 text-left', 'dropdown-item')}>
               <YourVideosIcon className={cb('size-icon', 'item')} />
               Create link
             </Link>
-            <Link to={'/content/create'} className={cb('dropdown-item')}>
+            <Link to={'/upload'} className={cb('btn mb-3 text-left', 'dropdown-item')}>
               <CreateLinkIcon className={cb('size-icon', 'item')} />
               Upload video
             </Link>

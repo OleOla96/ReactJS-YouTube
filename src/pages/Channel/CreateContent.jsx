@@ -18,11 +18,11 @@ const CreateContent = () => {
   const [dataReq, setDataReq] = useState(initialData);
   const [stateContent, setStateContent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [submit, setSubmit] = useState(false);
+  const [allowSubmit, setAllowSubmit] = useState(false);
 
   useEffect(() => {
-    if (dataReq.title && dataReq.linkVideo) setSubmit(true);
-    else setSubmit(false);
+    if (dataReq.title && dataReq.linkVideo) setAllowSubmit(true);
+    else setAllowSubmit(false);
   }, [dataReq.title, dataReq.linkVideo]);
 
   const handleInputChange = (e) => {
@@ -114,7 +114,7 @@ const CreateContent = () => {
           </label>
         </div>
         <div className="col-md-6 mx-auto">
-          <Button rounded submit className={cb('btn-round')} disabled={!submit || loading}>
+          <Button rounded submit className={cb('btn-round')} disabled={!allowSubmit || loading}>
             {loading && <span className="spinner-border spinner-border-sm"></span>}
             Create
           </Button>

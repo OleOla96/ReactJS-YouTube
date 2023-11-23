@@ -19,7 +19,7 @@ const Login = () => {
   const { setAuth, setAvatar } = useContexts();
   const [username, resetUser, userAttribs] = useInput('user', '');
   const [password, setPassword] = useState('');
-  const [check, toggleCheck] = useToggle('persist', false);
+  const [check, toggleCheck] = useToggle('persist', true);
   const [loading, setLoading] = useState(false);
   const [submit, setSubmit] = useState(false);
   useEffect(() => {
@@ -45,21 +45,19 @@ const Login = () => {
           withCredentials: true,
         },
       );
-      if (res) {
-        const accessToken = res.data?.accessToken;
-        if (res.data.avatar) {
-          setAvatar(res.data.avatar);
-          localStorage.setItem('avatar', res.data.avatar);
-        }
-        setLoading(false);
-        toast.success(res.data.message, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setAuth({ username, accessToken });
-        resetUser();
-        setPassword('');
-        navigate(from, { replace: true });
+      const accessToken = res.data?.accessToken;
+      if (res.data.avatar) {
+        setAvatar(res.data.avatar);
+        localStorage.setItem('avatar', res.data.avatar);
       }
+      setLoading(false);
+      toast.success(res.data.message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      setAuth({ username, accessToken });
+      resetUser();
+      setPassword('');
+      navigate(from, { replace: true });
     } catch (error) {
       setLoading(false);
       const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
@@ -71,7 +69,7 @@ const Login = () => {
 
   return (
     <div className={cb('login-register', 'mt5')}>
-      <ToastContainer />
+      <ToastContainer autoClose={2000} />
       <div className={cb('card-validate')}>
         <div className={cb('logo-login')}>
           <LogoLoginGoogle />
@@ -99,8 +97,12 @@ const Login = () => {
             </label>
           </div>
           <div className="form-group mt5">
-            <button className="btn-round btn-primary btn-block btn-state" disabled={!submit || loading}>
-              {loading && <span className="spinner-border spinner-border-sm"></span>}
+            <button
+              style={{ lineHeight: '1.8' }}
+              className="btn-round btn-primary btn-block btn-state"
+              disabled={!submit || loading}
+            >
+              {loading && <i style={{ lineHeight: 'inherit' }} className="fas fa-spinner fa-pulse mr-3" />}
               Login
             </button>
           </div>

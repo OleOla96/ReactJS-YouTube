@@ -30,14 +30,14 @@ function Search2({ classNames }) {
     const fetchApi = async () => {
       setLoading(true);
 
-      const result = await axios.get(`search/title?q=${title}`);
+      const result = await axios.get(`search/title?q=${encodeURIComponent(title)}`);
 
       setSearchResult(result.data);
       setLoading(false);
     };
 
     fetchApi();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [title]);
 
   const handleClear = () => {
@@ -62,7 +62,7 @@ function Search2({ classNames }) {
       <input type="checkbox" hidden id="showSearchBox" className={cb('btnSearch-sup')} />
       <div className={cb('groupSearchShow')}>
         <Tippy content="Back">
-          <label htmlFor="showSearchBox" className={cb('btn-circle', 'mb0')}>
+          <label htmlFor="showSearchBox" className={cb('btn-circle', 'mb-0')}>
             <ArrowLeftIcon className={cb('size-icon')} />
           </label>
         </Tippy>
@@ -120,7 +120,7 @@ function Search2({ classNames }) {
         </Tippy>
       </div>
       <Tippy content="Search">
-        <label htmlFor="showSearchBox" className={cb('btn-circle', 'mr-8px', 'mb0')}>
+        <label htmlFor="showSearchBox" className={cb('btn-circle', 'mr-8px mb-0')}>
           <SearchIcon className={cb('size-icon')} />
         </label>
       </Tippy>

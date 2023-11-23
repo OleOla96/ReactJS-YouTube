@@ -51,6 +51,7 @@
   max-height: min((100vh - 96px) - 60px, 734px);
   min-height: 36px;
   padding: 8px;
+  margin-right: 114px;
   border-radius: 12px;
   background: rgb(255, 255, 255);
   box-shadow: rgb(0 0 0 / 12%) 0px 2px 12px;
@@ -70,7 +71,7 @@
 
 .whiteSpaceRight {
   display: flex;
-  flex: 0 1 360px;
+  flex: 0 1 262px;
   background-color: transparent !important;
   visibility: hidden;
 }

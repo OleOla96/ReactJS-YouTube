@@ -92,10 +92,10 @@ function Public() {
     <div className={cb('watch', 'mt-4')}>
       <ToastContainer autoClose={1000} limit={1} />
       <div className={'col-md-12 col-lg-8'}>
-        {videoLocal ? (
-          <video className={cb('screenVideo')} src={videoURL} controls />
-        ) : (
-          <div className="resize">
+        <div className="resize">
+          {videoLocal ? (
+            <video className={cb('screenVideo')} src={videoURL} controls />
+          ) : (
             <iframe
               className={cb('screenVideo')}
               width="854"
@@ -106,10 +106,10 @@ function Public() {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
-          </div>
-        )}
+          )}
+        </div>
         <div className={cb('top-row', 'mt-4')}>
-          <div className="card-title mb-2">{content?.title}</div>
+          <div className="card-title">{content?.title}</div>
           <div className="subWarp">
             <div className={cb('left')}>
               <Link to={`channel/${content?.user?.channelName}`}>
