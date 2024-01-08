@@ -7,19 +7,20 @@ const cb = className.bind(style);
 
 function MenuSelect({
   list = [
-    { id: 2, role: 'user_premium' },
-    { id: 3, role: 'moderator' },
-    { id: 4, role: 'admin' },
+    { id: 2, role: 'moderator' },
+    { id: 3, role: 'admin' },
   ],
   data,
   setData,
   index,
 }) {
-  console.log('in');
+  console.log('Menu Selected');
   const isFirstRender = useRef(true);
   const [checked, setChecked] = useState(() => {
+    const roles = [];
     const result = [];
-    const find = list.filter((item) => data[index].roles[0].name.includes(item.role));
+    data[index].roles.forEach((role) => roles.push(role.name));
+    const find = list.filter((item) => roles.includes(item.role));
     find.forEach((item) => {
       result.push(item.role);
     });
@@ -36,6 +37,16 @@ function MenuSelect({
       }
     });
   };
+
+  // useEffect(() => {
+  //   if (isFirstRender.current) {
+  //     isFirstRender.current = false;
+  //   } else {
+  //     setChecked(() => {
+
+  //     });
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -61,7 +72,7 @@ function MenuSelect({
       <div key={item.id} className={cb('menu-item')}>
         <input
           id={item.role}
-          checked={checked.includes(item.role)}
+          checked={checked?.includes(item.role)}
           onChange={() => handleCheck(item.role)}
           type="checkbox"
         />

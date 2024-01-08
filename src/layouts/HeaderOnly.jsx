@@ -2,12 +2,13 @@ import PropTypes from 'prop-types';
 import classname from 'classnames/bind';
 import style from './layout.module.scss';
 import Header from './header';
-import useContexts from '../hooks/useContexts';
+import { useSelector } from 'react-redux';
 
 const cb = classname.bind(style);
 
 function HeaderOnly({ children }) {
-  const { auth, avatar } = useContexts();
+  const auth = useSelector((state) => state.auth);
+  const avatar = localStorage.getItem('avatar');
   return (
     <>
       <Header auth={auth} avatar={avatar} />

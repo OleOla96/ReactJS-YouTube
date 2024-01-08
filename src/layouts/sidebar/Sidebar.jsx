@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import useContexts from '~/hooks/useContexts';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '~/app/features/auth/authSlice';
 import classname from 'classnames/bind';
 import SidebarItem from './SidebarItem';
 import styles from './sidebar.module.scss';
@@ -37,7 +38,7 @@ import {
 const cb = classname.bind(styles);
 
 const Sidebar = ({ sidebarFull = true }) => {
-  const { auth } = useContexts();
+  const auth = useSelector(selectAuth);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [hide, setHide] = useState(true);
@@ -125,8 +126,8 @@ const Sidebar = ({ sidebarFull = true }) => {
               />
 
               <SidebarItem
-                title="ReactJS"
-                link="/reactjs"
+                title="NodeJS"
+                link="/nodejs"
                 icon={<ListIcon />}
                 mini={!sidebarFull}
                 activeIcon={<ListIcon />}

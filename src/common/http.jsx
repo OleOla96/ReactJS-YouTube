@@ -1,1 +1,0 @@
-export const http = 'http://localhost:8087/'

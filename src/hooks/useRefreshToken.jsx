@@ -1,26 +1,20 @@
-import axios from '../common/axios';
-import useContexts from './useContexts';
-import useLocalStorage  from './useLocalStorage';
-
+import axios from '~/common/axios';
+import { setCredentials } from '~/app/features/auth/authSlice';
+import { useDispatch } from 'react-redux';
 const useRefreshToken = () => {
-    const { setAuth } = useContexts()
-    const username = useLocalStorage('user')[0]
-    const refresh = async () => {
-        const res = await axios.get('auth/refresh', {
-            withCredentials: true
-        });
-        setAuth(prev => {
-            return {
-                ...prev,
-                accessToken: res.data.accessToken,
-                username
-            }
-        })
+  const dispatch = useDispatch();
+  const username = localStorage.getItem('username');
+  console.log(username);
+  const refresh = async () => {
+    const { data } = await axios.get('auth/refresh', {
+      withCredentials: true,
+    });
+    dispatch(setCredentials({ ...data, username: username }));
 
-        return res.data.accessToken;
-    }
-    
-    return refresh;
+    return data.accessToken;
+  };
+
+  return refresh;
 };
 
 export default useRefreshToken;

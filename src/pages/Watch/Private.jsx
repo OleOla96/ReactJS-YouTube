@@ -7,6 +7,9 @@ import { BASE_URL } from '~/common/axios';
 import classNames from 'classnames/bind';
 import style from './watch.scss';
 import SideBar from './SideBar';
+import TimeFromNow from '~/components/timeFromNow';
+import ViewCount from '~/components/count/ViewCount';
+import SubscriberCount from '~/components/count/SubscriberCount';
 import { LikeIcon, DisLikeIcon, ShareIcon } from '~/components/icons';
 
 const cb = classNames.bind(style);
@@ -74,7 +77,7 @@ function Private() {
                   {content?.user?.channelName}
                 </Link>
                 <span className={cb('text-infor')}>
-                  {content?.user?.subscriber} subcriber{content?.user?.subscriber > 1 && 's'}
+                  <SubscriberCount value={content?.user?.subscriber} />
                 </span>
               </div>
             </div>
@@ -101,7 +104,9 @@ function Private() {
         </div>
         <div className="bottom-row mt-4">
           <div className={cb('text-viewCount')}>
-            {content?.view} view{content?.view > 1 && 's'}
+            <ViewCount views={content?.view} />
+            &ensp;
+            <TimeFromNow timestamp={content?.createdAt} />
           </div>
           <div className="text-des">{content?.description}</div>
         </div>

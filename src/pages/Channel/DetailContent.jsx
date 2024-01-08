@@ -23,10 +23,10 @@ export default function DetailContent() {
     const getData = async () => {
       try {
         const res = await axiosPrivate.get(`crud/mycontent/${id}`);
-        setSubmitted(true);
+        setSubmitted(false);
         setContent(res.data);
       } catch (error) {
-        setSubmitted(true);
+        setSubmitted(false);
         const err = error?.response?.data?.message || error?.response?.message || error?.message || error.toString();
         toast.error(err, {
           position: toast.POSITION.TOP_CENTER,
@@ -68,7 +68,7 @@ export default function DetailContent() {
           </div>
           <div className="">
             {content.view} view{content.view > 1 ? 's' : ''} | {content.like} like{content.like > 1 ? 's' : ''} |{' '}
-            {content.disLike} dislike{content.disLike > 1 ? 's' : ''}
+            {content.dislike} dislike{content.disLike > 1 ? 's' : ''}
           </div>
         </div>
         <div className={cb('right')}>
@@ -94,27 +94,21 @@ export default function DetailContent() {
         </div>
       </div>
       <hr className="my-4" />
-      <p>
-        {content.description
-          ? content.description
-          : 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. ' +
-            'Sunt, ad corporis, assumenda ipsa eligendi dolor minima hic voluptatibus voluptate autem laboriosam, ' +
-            'eveniet distinctio officia ab amet quia illum ut voluptatum.'}
-      </p>
+      <p>{content.description ? content.description : 'No description.'}</p>
       <hr className="my-4" />
       <div>
         <label htmlFor="createdAt">Created at:&nbsp;</label>
-        <i id="createdAt" className="">
+        <span id="createdAt" className="">
           {moment(content.createdAt).format('HH:mm:ss ddd DD-MMM-YYYY')}
-        </i>
+        </span>
       </div>
       <div>
         <label htmlFor="updatedAt">Update at:&nbsp;</label>
-        <i id="updatedAt" className="">
+        <span id="updatedAt" className="">
           {moment(content.updatedAt).format('HH:mm:ss ddd DD-MMM-YYYY')}
-        </i>
+        </span>
       </div>
-      <Link className="btn btn-primary btn-lg" to="/managevideos" role="button">
+      <Link className="btn btn-primary btn-lg" to="/manage-my-videos" role="button">
         <i className="fas fa-reply mr-3" />
         Back
       </Link>

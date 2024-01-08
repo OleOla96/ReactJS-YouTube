@@ -1,15 +1,16 @@
 import { Outlet } from 'react-router-dom';
 import { useState, useLayoutEffect } from 'react';
 import useRefreshToken from '../hooks/useRefreshToken';
-import useContexts from '../hooks/useContexts';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '~/app/features/auth/authSlice';
 import useLocalStorage from '../hooks/useLocalStorage';
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [persist] = useLocalStorage('persist', false);
-  const { auth } = useContexts();
+  const auth = useSelector(selectAuth);
   const refresh = useRefreshToken();
-  // console.log('persist: ', persist);
+  console.log('persist: ', persist);
   useLayoutEffect(() => {
     let isMounted = true;
 

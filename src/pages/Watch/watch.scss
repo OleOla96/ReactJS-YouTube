@@ -200,3 +200,15 @@
     display: none;
   }
 }
+
+@media (max-width: 696px) {
+  .top-row {
+    .subWarp {
+      flex-direction: column;
+      .right {
+        margin-top: 15px;
+        justify-content: flex-start;
+      }
+    }
+  }
+}

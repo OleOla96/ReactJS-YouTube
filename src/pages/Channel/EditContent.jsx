@@ -37,7 +37,7 @@ const EditContent = ({ contentEdit, setEdit, setSubmitted, toast }) => {
       stateContent,
     };
     try {
-      const res = await axiosPrivate.patch('crud/editcontent', data);
+      const res = await axiosPrivate.patch('crud/edit', data);
 
       setLoading(false);
       setEdit(false);

@@ -135,7 +135,7 @@ const UploadContent = () => {
         </div>
         <div className="col-md-6 mx-auto">
           <Button rounded submit className={cb('btn-round')} disabled={!submit || loading}>
-            {loading && <span className="spinner-border spinner-border-sm"></span>}
+            {loading && <i style={{ lineHeight: 'inherit' }} className="fas fa-spinner fa-pulse mr-3" />}
             Upload
           </Button>
         </div>

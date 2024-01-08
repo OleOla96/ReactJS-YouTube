@@ -105,7 +105,7 @@ export default function Detail() {
           {moment(content.updatedAt).format('HH:mm:ss ddd DD-MMM-YYYY')}
         </i>
       </div>
-      <Link className="btn btn-primary btn-lg" to="/managevideos" role="button">
+      <Link className="btn btn-primary btn-lg" to="/manage-my-videos" role="button">
         <i className="fas fa-reply mr-3" />
         Back
       </Link>

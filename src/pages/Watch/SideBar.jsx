@@ -1,18 +1,25 @@
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '~/common/axios';
 import classNames from 'classnames/bind';
 import styles from './watch.scss';
 import PropTypes from 'prop-types';
 
 const cb = classNames.bind(styles);
 
-function SideBar({ list, URL, extension }) {
+function SideBar({ list }) {
+  const extension = ['.mp4', '.mkv', '.mov'];
   return (
     <>
       {list?.map((res) => (
         <div key={res?.id} className={cb('cardSidebar', 'card mb-4')}>
           <Link to={`/watch/${res?.linkVideo}`}>
             {res?.videoName && extension.some((ex) => res?.videoName.endsWith(ex)) ? (
-              <video loading="lazy" className="card-img-top" src={`${URL}video/${res?.videoName}`} alt={res?.title} />
+              <video
+                loading="lazy"
+                className="card-img-top"
+                src={`${BASE_URL}video/${res?.videoName}`}
+                alt={res?.title}
+              />
             ) : (
               <img
                 loading="lazy"
@@ -37,8 +44,6 @@ function SideBar({ list, URL, extension }) {
 
 SideBar.propTypes = {
   list: PropTypes.array.isRequired,
-  URL: PropTypes.string.isRequired,
-  extension: PropTypes.array.isRequired,
 };
 
 export default SideBar;

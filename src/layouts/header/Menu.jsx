@@ -27,7 +27,7 @@ export default function Menu({ auth, avatar }) {
         {avatarURL ? (
           <img src={avatarURL} alt="avatar" className="avatarHeader" />
         ) : (
-          <div className="avatarHeader">{auth.username.slice(0, 1).toUpperCase()}</div>
+          <div className="avatarHeader">{auth?.username.slice(0, 1).toUpperCase()}</div>
         )}
       </label>
       <div className={cb('dropdown-menu')}>
@@ -36,7 +36,7 @@ export default function Menu({ auth, avatar }) {
             {avatarURL ? (
               <img src={avatarURL} alt="avatar" className="avatarHeader" />
             ) : (
-              <div className="avatarHeader">{auth.username.slice(0, 1).toUpperCase()}</div>
+              <div className="avatarHeader">{auth?.username.slice(0, 1).toUpperCase()}</div>
             )}
           </div>
           <div className={cb('inforProfile')}>
@@ -47,18 +47,22 @@ export default function Menu({ auth, avatar }) {
         </div>
         <div className={cb('dropdown-divider')}></div>
         {roles.find((role) => role === 'admin') ? (
-          <Link className={cb('dropdown-item')} to={'/admin'}>
-            <ManagerIcon className={cb('size-icon', 'item')} />
-            Admin
-          </Link>
+          <>
+            <Link className={cb('dropdown-item')} to={'/manage-users'}>
+              <ManagerIcon className={cb('size-icon', 'item')} />
+              Manage users
+            </Link>
+            <Link className={cb('dropdown-item')} to={'/manage-videos'}>
+              <ManagerIcon className={cb('size-icon', 'item')} />
+              Manage videos
+            </Link>
+          </>
         ) : roles.find((role) => role === 'moderator') ? (
-          <Link className={cb('dropdown-item')} to={'/moderator'}>
+          <Link className={cb('dropdown-item')} to={'/manage-videos'}>
             <ManagerIcon className={cb('size-icon', 'item')} />
-            Moderator
+            Manage videos
           </Link>
-        ) : (
-          <></>
-        )}
+        ) : null}
         <Link className={cb('dropdown-item')} to={'/channel'}>
           <ChannelIcon className={cb('size-icon', 'item')} />
           Your channel

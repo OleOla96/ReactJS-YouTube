@@ -5,7 +5,7 @@ import style from './menuSelect.module.scss';
 
 const cb = className.bind(style);
 
-export default function Edit({ user, setEdit, setSubmitted, toast }) {
+export default function Perform({ setSubmitted, toast }) {
   const axiosPrivate = useAxiosPrivate();
   const [checked, setChecked] = useState([]);
   const [selectedAction, setSelectedAction] = useState('');

@@ -1,44 +1,45 @@
-import { axiosPrivate } from "../common/axios";
-import { useEffect } from "react";
-import useRefreshToken from "./useRefreshToken";
-import useContexts from "./useContexts";
+import { axiosPrivate } from '~/common/axios';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import useRefreshToken from './useRefreshToken';
 
 const useAxiosPrivate = () => {
-    const refresh = useRefreshToken();
-    const {auth} = useContexts();
+  const refresh = useRefreshToken();
+  const auth = useSelector((state) => state.auth);
 
-    useEffect(() => {
-        const requestIntercept = axiosPrivate.interceptors.request.use(
-            config => {
-                if (!config.headers['Authorization']) {
-                    config.headers['Authorization'] = `Bearer ${auth?.accessToken}`;
-                }
-                return config;
-            }, (error) => Promise.reject(error)
-        );
-
-        const responseIntercept = axiosPrivate.interceptors.response.use(
-            response => response,
-            async (error) => {
-                const prevRequest = error?.config;
-                if (error?.response?.status === 403 && !prevRequest?.sent) {
-                    prevRequest.sent = true;
-                    const newAccessToken = await refresh();
-                    prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                    return axiosPrivate(prevRequest);
-                }
-                return Promise.reject(error);
-            }
-        );
-
-        return () => {
-            axiosPrivate.interceptors.request.eject(requestIntercept);
-            axiosPrivate.interceptors.response.eject(responseIntercept);
+  useEffect(() => {
+    const requestIntercept = axiosPrivate.interceptors.request.use(
+      (config) => {
+        if (!config.headers['Authorization']) {
+          config.headers['Authorization'] = `Bearer ${auth?.accessToken}`;
         }
-        // eslint-disable-next-line
-    }, [auth])
+        return config;
+      },
+      (error) => Promise.reject(error),
+    );
 
-    return axiosPrivate;
-}
+    const responseIntercept = axiosPrivate.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const prevRequest = error?.config;
+        if (error?.response?.status === 403 && !prevRequest?.sent) {
+          prevRequest.sent = true;
+          const newAccessToken = await refresh();
+          prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+          return axiosPrivate(prevRequest);
+        }
+        return Promise.reject(error);
+      },
+    );
+
+    return () => {
+      axiosPrivate.interceptors.request.eject(requestIntercept);
+      axiosPrivate.interceptors.response.eject(responseIntercept);
+    };
+    // eslint-disable-next-line
+  }, [auth]);
+
+  return axiosPrivate;
+};
 
 export default useAxiosPrivate;

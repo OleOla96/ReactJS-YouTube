@@ -1,27 +1,30 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import classname from 'classnames/bind';
+import styles from './loginRegister.module.scss';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import useContexts from '~/hooks/useContexts';
 import useInput from '~/hooks/useInput';
 import useToggle from '~/hooks/useToggle';
-import axios from '~/common/axios';
-import styles from './loginRegister.module.scss';
+import Button from '~/components/button/Button';
 import { LogoLoginGoogle } from '~/components/icons';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '~/app/features/auth/authSlice';
+import axios from '~/common/axios';
 
 const cb = classname.bind(styles);
 
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || '/';
-  const { setAuth, setAvatar } = useContexts();
-  const [username, resetUser, userAttribs] = useInput('user', '');
+  const [username, resetUsername, userAttribs] = useInput('username', '');
   const [password, setPassword] = useState('');
   const [check, toggleCheck] = useToggle('persist', true);
   const [loading, setLoading] = useState(false);
   const [submit, setSubmit] = useState(false);
+
   useEffect(() => {
     if (location?.state?.message)
       toast.success(location.state.message, {
@@ -45,22 +48,13 @@ const Login = () => {
           withCredentials: true,
         },
       );
-      const accessToken = res.data?.accessToken;
-      if (res.data.avatar) {
-        setAvatar(res.data.avatar);
-        localStorage.setItem('avatar', res.data.avatar);
-      }
-      setLoading(false);
-      toast.success(res.data.message, {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      setAuth({ username, accessToken });
-      resetUser();
+      dispatch(setCredentials({ ...res.data }));
+      resetUsername();
       setPassword('');
       navigate(from, { replace: true });
     } catch (error) {
       setLoading(false);
-      const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
+      const err = error?.response?.data?.message || error.response.message || error.message;
       toast.error(err, {
         position: toast.POSITION.TOP_CENTER,
       });
@@ -76,8 +70,8 @@ const Login = () => {
         </div>
         <form onSubmit={handleLogin}>
           <div className={cb('form-group')}>
-            <label htmlFor="username">Username:</label>
-            <input autoFocus id="username" type="text" className={cb('form-control')} {...userAttribs} required />
+            <label htmlFor="user">Username:</label>
+            <input autoFocus id="user" type="text" className={cb('form-control')} {...userAttribs} required />
           </div>
           <div className={cb('form-group')}>
             <label htmlFor="password">Password:</label>
@@ -97,14 +91,10 @@ const Login = () => {
             </label>
           </div>
           <div className="form-group mt5">
-            <button
-              style={{ lineHeight: '1.8' }}
-              className="btn-round btn-primary btn-block btn-state"
-              disabled={!submit || loading}
-            >
+            <Button rounded submit className="btn-block" disabled={!submit || loading}>
               {loading && <i style={{ lineHeight: 'inherit' }} className="fas fa-spinner fa-pulse mr-3" />}
               Login
-            </button>
+            </Button>
           </div>
           <p className={cb('text-login-register')}>
             If you don't have an account, click&nbsp;

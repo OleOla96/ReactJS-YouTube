@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
@@ -7,14 +7,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { isEmail } from 'validator';
 import classname from 'classnames/bind';
 import styles from './loginRegister.module.scss';
-import axios from '../../common/axios';
+import Button from '~/components/button/Button';
+import axios from '~/common/axios';
 
 const cb = classname.bind(styles);
 
 function Register() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -42,13 +42,9 @@ function Register() {
     }),
     onSubmit: async (values) => {
       setLoading(true);
-      setTimeout(() => {
-        window.alert('Stop');
-      }, 0);
       try {
         const { username, email, password } = values;
         await axios.post('auth/signup', { username, email, password });
-        setLoading(false);
         navigate('/login', { state: { message: 'You have successfully registered' } });
       } catch (error) {
         setLoading(false);
@@ -141,14 +137,10 @@ function Register() {
           </div>
 
           <div className="form-group mt5">
-            <button
-              className="btn-round btn-primary btn-block btn-state"
-              disabled={!(formik.dirty && formik.isValid)}
-              type="submit"
-            >
+            <Button rounded submit className="btn-block" disabled={!(formik.dirty && formik.isValid)} type="submit">
               {loading && <i style={{ lineHeight: 'inherit' }} className="fas fa-spinner fa-pulse mr-3" />}
               Sign Up
-            </button>
+            </Button>
           </div>
         </form>
       </div>

@@ -9,7 +9,7 @@ const cb = classname.bind(styles);
 const ChangeAvatar = ({ onChangeAvatar, setSubmitted, toast, avatarOld }) => {
   const axiosPrivate = useAxiosPrivate();
   const [file, setFile] = useState();
-  const [avatarPr, setAvatar] = useState();
+  const [avatarPr, setAvatarPr] = useState();
   const [loading, setLoading] = useState(false);
   const [allowSubmit, setAllowSubmit] = useState(false);
 
@@ -26,7 +26,7 @@ const ChangeAvatar = ({ onChangeAvatar, setSubmitted, toast, avatarOld }) => {
   const handlePreviewAvatar = (e) => {
     const _file = e.target.files[0];
     setFile(_file);
-    setAvatar(URL.createObjectURL(_file));
+    setAvatarPr(URL.createObjectURL(_file));
   };
 
   const handleUpdate = async (e) => {

@@ -4,18 +4,19 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 import className from 'classnames/bind';
-import style from './admin.module.scss';
+import style from './manageUsers.module.scss';
 import MenuSelect from './MenuSelect';
+import ReactPaginate from 'react-paginate';
 
 const cb = className.bind(style);
 
-function Admin() {
+function ManageUsers() {
   const axiosPrivate = useAxiosPrivate();
   const [data, setData] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [checked, setChecked] = useState([]);
   const [selectedAction, setSelectedAction] = useState('');
-  console.log('out');
+  // console.log('out');
   useEffect(() => {
     const getData = async () => {
       try {
@@ -103,7 +104,7 @@ function Admin() {
           position: toast.POSITION.TOP_CENTER,
         });
       }
-    if (selectedAction === 'edit')
+    if (selectedAction === 'update')
       try {
         const filterUser = data.filter((user) => checked.includes(user.id));
         const dataReq = [];
@@ -129,6 +130,8 @@ function Admin() {
       }
   };
 
+  const handlePageClick = () => {};
+
   return (
     <div className="container mt5">
       <ToastContainer autoClose={2000} />
@@ -143,7 +146,7 @@ function Admin() {
           name="action"
         >
           <option value="">Option...</option>
-          <option value="edit">Edit</option>
+          <option value="update">Update</option>
           <option value="delete">Delete</option>
         </select>
         <button type="submit" className="btn btn-primary btn-sm" disabled={checked.length < 1}>
@@ -201,8 +204,28 @@ function Admin() {
           )}
         </tbody>
       </table>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel="next >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={50}
+          previousLabel="< previous"
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          previousClassName="page-item"
+          previousLinkClassName="page-link"
+          nextClassName="page-item"
+          nextLinkClassName="page-link"
+          breakClassName="page-item"
+          breakLinkClassName="page-link"
+          containerClassName="pagination"
+          activeClassName="active"
+        />
+      </div>
     </div>
   );
 }
 
-export default Admin;
+export default ManageUsers;

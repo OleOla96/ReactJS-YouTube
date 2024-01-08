@@ -1,30 +1,32 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import useContexts from '~/hooks/useContexts';
+import { useSelector } from 'react-redux';
 import className from 'classnames/bind';
 import styles from './header.module.scss';
 import Tippy from '@tippyjs/react';
 import Search1 from '../search/Search1';
 import Search2 from '../search/Search2';
-import SideEffect from './SideEffect';
+import SidebarEffect from './SidebarEffect';
 import { BellIcon, CameraIcon, CreateLinkIcon, LogoIcon, VoiceIcon, YourVideosIcon } from '~/components/icons';
 import Button from '~/components/button/Button';
 import Menu from './Menu';
+import { selectAuth } from '~/app/features/auth/authSlice';
 
 const cb = className.bind(styles);
 
 function HeaderMain({ setSidebarFull, change }) {
-  const { auth, avatar } = useContexts();
+  const auth = useSelector(selectAuth);
+  const avatar = localStorage.getItem('avatar') ? localStorage.getItem('avatar') : null;
   const { pathname } = useLocation();
 
   const navigate = useNavigate();
   const hanldeLogin = () => {
-    navigate('/login', { state: { from: pathname } });
+    navigate('/login', { state: { from: pathname === '/register' ? '/' : pathname } });
   };
 
   return (
     <nav className={cb('header')}>
       <div className={cb('headerLeft')}>
-        <SideEffect setSidebarFull={setSidebarFull} change={change} auth={auth} onLogin={hanldeLogin} />
+        <SidebarEffect setSidebarFull={setSidebarFull} change={change} auth={auth} onLogin={hanldeLogin} />
         <div className={cb('logoHeader')}>
           <Link to={'/'} className={cb('navbarBrand')}>
             <LogoIcon className={cb('brandIcon')} />
@@ -41,7 +43,7 @@ function HeaderMain({ setSidebarFull, change }) {
           </button>
         </Tippy>
       </div>
-      {Object.keys(auth).length ? (
+      {auth.accessToken ? (
         <div className={cb('headerRight')}>
           <input type="checkbox" hidden id="checkDropdown-create" className={cb('checkDropdown-menu-create')} />
           <label htmlFor="checkDropdown-create" className={cb('bg-cl-trans-1')}></label>

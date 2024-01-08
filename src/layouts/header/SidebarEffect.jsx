@@ -37,7 +37,7 @@ import {
 
 const cb = classname.bind(styles);
 
-function SideEffect({ setSidebarFull, change = true, auth, onLogin }) {
+function SidebarEffect({ setSidebarFull, change = true, auth, onLogin }) {
   const [hide, setHide] = useState(true);
 
   return (
@@ -152,4 +152,4 @@ function SideEffect({ setSidebarFull, change = true, auth, onLogin }) {
   );
 }
 
-export default SideEffect;
+export default SidebarEffect;

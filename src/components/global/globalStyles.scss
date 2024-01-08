@@ -64,8 +64,7 @@ body {
 }
 
 button,
-input,
-[tabindex] {
+input {
   outline: none;
   border: none;
 }
@@ -75,7 +74,8 @@ button {
 }
 
 a,
-a:hover {
+a:hover,
+a:not(.nav-link) {
   color: var(--text-color-main);
   text-decoration: none;
 }
@@ -208,11 +208,6 @@ a:hover {
 
   .card-title {
     padding-bottom: 1rem;
-  }
-
-  .btn-round {
-    border-radius: 30px;
-    min-height: 36px;
   }
 }
 

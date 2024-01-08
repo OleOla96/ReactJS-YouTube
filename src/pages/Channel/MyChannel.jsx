@@ -3,18 +3,21 @@ import { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
-import useContexts from '~/hooks/useContexts';
 import ChangeAvatar from './ChangeAvatar';
 import Button from '~/components/button/Button';
 import { BASE_URL } from '~/common/axios';
 import className from 'classnames/bind';
 import style from './myChannel.module.scss';
 import { EditAvatarIcon } from '~/components/icons';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '~/app/features/auth/authSlice';
 
 const cb = className.bind(style);
 
 const MyChannel = () => {
-  const { auth, avatar, setAvatar } = useContexts();
+  const auth = useSelector(selectAuth);
+  const [avatar, setAvatar] = useState(localStorage.getItem('avatar'));
+  console.log(avatar);
   const [contents, setContents] = useState([]);
   const [user, setUser] = useState({});
   const extension = ['.mp4', '.mkv', '.mov'];
@@ -74,7 +77,7 @@ const MyChannel = () => {
             circle
             outline
             onClick={() => setChangeAvatar(!changeAvatar)}
-            className="mr5"
+            className={cb('wrap', 'mr5')}
           >
             <div className={cb('avatar')}>{auth?.username?.slice(0, 1).toUpperCase()}</div>
           </Button>
@@ -89,10 +92,8 @@ const MyChannel = () => {
               </p>
             </div>
             <div className={cb('innerHeader-btn')}>
-              <Button primary className={cb('mr-2')}>
-                Customise channel
-              </Button>
-              <Button to={'/managevideos'} primary>
+              <Button primary>Customise channel</Button>
+              <Button to={'/manage-my-videos'} primary>
                 Manage videos
               </Button>
             </div>
@@ -142,9 +143,7 @@ const MyChannel = () => {
             </div>
           ))
         ) : (
-          <span className="text-center" style={{ width: '80%' }}>
-            No content.
-          </span>
+          <span className="text-center">No content.</span>
         )}
       </div>
     </div>
