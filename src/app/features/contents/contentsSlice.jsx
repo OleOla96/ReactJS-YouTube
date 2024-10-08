@@ -26,11 +26,17 @@ const contentsSlice = createSlice({
       state.currentPage = action.payload.currentPage;
       state.totalPages = action.payload.totalPages;
     },
+    getMoreDataStart: (state) => {
+      state.status = 'loading';
+    },
+    getMoreDataFail: (state, action) => {
+      state.status = 'failed';
+      state.message = action.payload.message;
+    },
     getMoreDataSuccess: (state, action) => {
-      let oldData = state.data;
       state.status = 'succeeded';
       state.message = action.payload.message;
-      state.data = oldData.push(action.payload.contents);
+      state.data.push(action.payload.contents);
       state.currentPage = action.payload.currentPage;
       state.totalPages = action.payload.totalPages;
     },
@@ -96,6 +102,8 @@ export const {
   getDataStart,
   getDataFail,
   getDataSuccess,
+  getMoreDataStart,
+  getMoreDataFail,
   getMoreDataSuccess,
   createStart,
   createFail,

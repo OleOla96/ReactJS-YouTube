@@ -6,7 +6,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { BASE_URL } from '~/common/axios';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 import { useDispatch, useSelector } from 'react-redux';
-import { getContents } from '~/app/features/contents/contentsApi';
+import { getContents, getMoreContents } from '~/app/features/contents/contentsApi';
 import { selectAllContents } from '~/app/features/contents/contentsSlice';
 import { selectAuth } from '~/app/features/auth/authSlice';
 import TimeFromNow from '~/components/timeFromNow';
@@ -23,6 +23,18 @@ const Home = () => {
   const getData = async (page) => {
     if (!accessToken) await getContents(page, dispatch);
     else await getContents(page, dispatch, axiosAuth);
+  };
+  const getMoreData = async () => {
+    const nextPage = page + 1;
+    if (!accessToken) await getMoreContents(nextPage, dispatch);
+    else await getMoreContents(nextPage, dispatch, axiosAuth);
+    if (totalPages === 1) {
+      setHasMore(false);
+    } else if (totalPages === nextPage) {
+      setHasMore(false);
+    } else {
+      setPage(nextPage);
+    }
   };
   useEffect(() => {
     getData(page);
@@ -83,18 +95,6 @@ const Home = () => {
       position: toast.POSITION.TOP_CENTER,
     });
   }
-
-  const getMoreData = () => {
-    const nextPage = page + 1;
-    getData(nextPage);
-    if (totalPages === 1) {
-      setHasMore(false);
-    } else if (totalPages === nextPage) {
-      setHasMore(false);
-    } else {
-      setPage(nextPage);
-    }
-  };
 
   return (
     <>

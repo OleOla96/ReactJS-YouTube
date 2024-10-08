@@ -13,30 +13,36 @@ const cb = className.bind(style);
 function ManageUsers() {
   const axiosPrivate = useAxiosPrivate();
   const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [checked, setChecked] = useState([]);
   const [selectedAction, setSelectedAction] = useState('');
   // console.log('out');
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await axiosPrivate.get('roles/admin');
-        setData(res.data);
-        setSubmitted(false);
-        toast.success(res.data.message, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-      } catch (error) {
-        setSubmitted(false);
-        const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
-        toast.error(err, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-      }
-    };
-    getData();
+    getData(page);
     // eslint-disable-next-line
   }, [submitted]);
+
+  const getData = async (p) => {
+    try {
+      const res = await axiosPrivate.get(`roles/admin/?page=${p}`);
+      setData(res.data.contents);
+      setPage(res.data.currentPage);
+      setTotalPages(res.data.totalPages);
+      // console.log(res);
+      setSubmitted(false);
+      toast.success(res.data.message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    } catch (error) {
+      setSubmitted(false);
+      const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
+      toast.error(err, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  };
 
   const handleCheck = (id) => {
     setChecked((pre) => {
@@ -98,11 +104,13 @@ function ManageUsers() {
         toast.success(res.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });
+        return;
       } catch (error) {
         const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
         toast.error(err, {
           position: toast.POSITION.TOP_CENTER,
         });
+        return;
       }
     if (selectedAction === 'update')
       try {
@@ -122,15 +130,21 @@ function ManageUsers() {
         toast.success(res.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });
+        return;
       } catch (error) {
         const err = error?.response?.data?.message || error.response.message || error.message || error.toString();
         toast.error(err, {
           position: toast.POSITION.TOP_CENTER,
         });
+        return;
       }
   };
 
-  const handlePageClick = () => {};
+  const handlePageClick = (e) => {
+    const newOffset = e.selected + 1;
+    console.log(`User requested page number ${e.selected}, which is offset ${newOffset}`);
+    getData(newOffset);
+  };
 
   return (
     <div className="container mt5">
@@ -210,7 +224,7 @@ function ManageUsers() {
           nextLabel="next >"
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
-          pageCount={50}
+          pageCount={totalPages}
           previousLabel="< previous"
           pageClassName="page-item"
           pageLinkClassName="page-link"

@@ -3,6 +3,8 @@ import {
   getDataStart,
   getDataFail,
   getDataSuccess,
+  getMoreDataStart,
+  getMoreDataFail,
   getMoreDataSuccess,
   createStart,
   createFail,
@@ -27,6 +29,7 @@ export const getContents = async (page = 1, dispatch, axiosAuth) => {
     let res;
     if (!axiosAuth) res = await axios.get(`show/all/?page=${page}`);
     else res = await axiosAuth.get(`show/all/?page=${page}`);
+    // console.log(res.data);
     dispatch(getDataSuccess(res.data));
   } catch (error) {
     dispatch(getDataFail(error));
@@ -34,14 +37,15 @@ export const getContents = async (page = 1, dispatch, axiosAuth) => {
 };
 
 export const getMoreContents = async (page = 2, dispatch, axiosAuth) => {
-  dispatch(getDataStart());
+  dispatch(getMoreDataStart());
   try {
     let res;
     if (!axiosAuth) res = await axios.get(`show/all/?page=${page}`);
     else res = await axiosAuth.get(`show/all/?page=${page}`);
+    // console.log(res.data);
     dispatch(getMoreDataSuccess(res.data));
   } catch (error) {
-    dispatch(getDataFail(error));
+    dispatch(getMoreDataFail(error));
   }
 };
 

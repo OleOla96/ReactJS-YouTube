@@ -14,7 +14,7 @@ function MenuSelect({
   setData,
   index,
 }) {
-  console.log('Menu Selected');
+  // console.log('Menu Selected', index);
   const isFirstRender = useRef(true);
   const [checked, setChecked] = useState(() => {
     const roles = [];

@@ -10,7 +10,7 @@ const PersistLogin = () => {
   const [persist] = useLocalStorage('persist', false);
   const auth = useSelector(selectAuth);
   const refresh = useRefreshToken();
-  console.log('persist: ', persist);
+  // console.log('persist: ', persist);
   useLayoutEffect(() => {
     let isMounted = true;
 
